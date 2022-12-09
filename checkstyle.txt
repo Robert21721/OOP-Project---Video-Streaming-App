@@ -1,0 +1,9 @@
+Starting audit...
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/Test.java:1: File does not end with a newline. [NewlineAtEndOfFile]
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/Test.java:9:28: Using the '.*' form of import should be avoided - java.util.concurrent.*. [AvoidStarImport]
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/checker/CheckStyleConstants.java:3:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/Main.java:1:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/Main.java:2:5: Missing a Javadoc comment. [MissingJavadocMethod]
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/Main.java:2:29: Parameter args should be final. [FinalParameters]
+Audit done.
+Checkstyle ends with 6 errors.
