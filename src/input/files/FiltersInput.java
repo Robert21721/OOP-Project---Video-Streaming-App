@@ -1,6 +1,6 @@
-package InputFiles;
+package input.files;
 
-public class FiltersInput {
+public final class FiltersInput {
     private SortInput sort;
     private ContainsInput contains;
 
@@ -10,7 +10,7 @@ public class FiltersInput {
         return sort;
     }
 
-    public void setSort(SortInput sortInput) {
+    public void setSort(final SortInput sortInput) {
         this.sort = sortInput;
     }
 
@@ -18,7 +18,7 @@ public class FiltersInput {
         return contains;
     }
 
-    public void setContains(ContainsInput containsInput) {
+    public void setContains(final ContainsInput containsInput) {
         this.contains = containsInput;
     }
 }

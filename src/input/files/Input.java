@@ -1,4 +1,4 @@
-package InputFiles;
+package input.files;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public final class Input {
         return users;
     }
 
-    public void setUsers(ArrayList<UsersInput> users) {
+    public void setUsers(final ArrayList<UsersInput> users) {
         this.users = users;
     }
 
@@ -21,7 +21,7 @@ public final class Input {
         return movies;
     }
 
-    public void setMovies(ArrayList<MoviesInput> movies) {
+    public void setMovies(final ArrayList<MoviesInput> movies) {
         this.movies = movies;
     }
 
@@ -29,7 +29,7 @@ public final class Input {
         return actions;
     }
 
-    public void setActions(ArrayList<ActionsInput> actions) {
+    public void setActions(final ArrayList<ActionsInput> actions) {
         this.actions = actions;
     }
 }

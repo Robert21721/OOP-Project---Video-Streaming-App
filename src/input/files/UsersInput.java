@@ -1,8 +1,6 @@
-package InputFiles;
+package input.files;
 
-import java.util.ArrayList;
-
-public class UsersInput {
+public final class UsersInput {
     private CredentialsInput credentials;
     public UsersInput() { }
 
@@ -10,7 +8,7 @@ public class UsersInput {
         return credentials;
     }
 
-    public void setCredentials(CredentialsInput credentials) {
+    public void setCredentials(final CredentialsInput credentials) {
         this.credentials = credentials;
     }
 }
