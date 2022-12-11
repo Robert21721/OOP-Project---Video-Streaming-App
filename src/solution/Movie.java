@@ -31,4 +31,15 @@ public final class Movie {
             this.countriesBanned.add(countryBanned);
         }
     }
+
+    @Override
+    public String toString() {
+        return "{ name: " + this.name +
+            ", year: " + this.year +
+            ", duration: " + this.duration +
+            ", genres: " + this.genres +
+            ", actors: " + this.actors +
+            ", countriesBanned: " + this.countriesBanned +
+            " }";
+    }
 }
