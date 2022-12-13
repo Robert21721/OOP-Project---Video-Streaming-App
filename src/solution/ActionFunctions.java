@@ -1,9 +1,6 @@
 package solution;
 
-import solution.Pages.Login;
-import solution.Pages.Logout;
-import solution.Pages.Page;
-import solution.Pages.Register;
+import solution.Pages.*;
 
 public class ActionFunctions {
     private ActionFunctions() { }
@@ -15,6 +12,12 @@ public class ActionFunctions {
 
             case "register":
                 return Register.getInstance();
+
+            case "movies":
+                return Movies.getInstance();
+
+            case "upgrades":
+                return Upgrades.getInstance();
         }
 
         return null;

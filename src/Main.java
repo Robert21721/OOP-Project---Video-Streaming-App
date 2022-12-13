@@ -22,15 +22,21 @@ public class Main {
         // System.out.printf("ceva\n");
 
         for (ActionsInput action : inputData.getActions()) {
-            System.out.println(appLogic.getCurrentPage());
-            System.out.println(appLogic.getCurrentUser());
+            // System.out.println(appLogic.getCurrentPage());
+            // System.out.println(appLogic.getCurrentUser());
 
             if (action.getType().equals("change page")) {
                 if (!appLogic.getCurrentPage().executeChangePage(action, appLogic, dataBase)) {
                     output.addObject().put("error", "Error").
                             putPOJO("currentMoviesList", appLogic.getCurrentMovies()).
                             putPOJO("currentUser", null);
+                } else if (action.getPage().equals("movies")) {
+                    output.addObject().putPOJO("error", null).
+                            putPOJO("currentMoviesList", appLogic.getCurrentMovies()).
+                            putPOJO("currentUser", appLogic.getCurrentUser());
                 }
+
+
             }
 
             if (action.getType().equals("on page")) {

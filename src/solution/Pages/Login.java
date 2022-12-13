@@ -31,25 +31,19 @@ public final class Login implements Page {
     }
 
     public boolean executeOnPage(ActionsInput input,AppLogic app, DataBase dataBase) {
-        // System.out.println("input in login " + input.getFeature());
         if (this.actionsOnPage.contains(input.getFeature())) {
-            // System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
             return userLogin(input, app, dataBase);
         }
         return false;
     }
 
     private boolean userLogin(ActionsInput input, AppLogic app, DataBase dataBase) {
-        // System.out.println("merge");
         User user = dataBase.getUsers().
                 stream().
                 filter(u -> u.getCredentials().getName().equals(input.getCredentials().getName()) &&
                         u.getCredentials().getPassword().equals(input.getCredentials().getPassword())).
                 findFirst().
                 orElse(null);
-
-        // System.out.println("nu mai merge");
-        // System.out.println(user);
 
         if (user != null) {
             app.setCurrentUser(user);

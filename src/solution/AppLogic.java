@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public final class AppLogic {
     private Page currentPage;
     private User currentUser;
-    private ArrayList<Movies> currentMovies;
+    private ArrayList<Movie> currentMovies;
 
     public AppLogic() {
         this.currentPage = HomePageNeautentificat.getInstance();
@@ -33,11 +33,11 @@ public final class AppLogic {
         this.currentUser = currentUser;
     }
 
-    public ArrayList<Movies> getCurrentMovies() {
+    public ArrayList<Movie> getCurrentMovies() {
         return currentMovies;
     }
 
-    public void setCurrentMovies(ArrayList<Movies> currentMovies) {
+    public void setCurrentMovies(ArrayList<Movie> currentMovies) {
         this.currentMovies = currentMovies;
     }
 }

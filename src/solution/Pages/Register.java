@@ -30,9 +30,9 @@ public final class Register implements Page {
     }
 
     public boolean executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase) {
-        System.out.println("input in register " + input.getFeature());
+        // System.out.println("input in register " + input.getFeature());
         if (this.actionsOnPage.contains(input.getFeature())) {
-            System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvv");
+            // System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvv");
             return userRegister(input, app, dataBase);
         }
         return false;
@@ -45,12 +45,12 @@ public final class Register implements Page {
                 findFirst().
                 orElse(null);
 
-        System.out.println(existentUser);
+        // System.out.println(existentUser);
 
         if (existentUser != null) {
             return false;
         } else {
-            System.out.println("intra macar?");
+            // System.out.println("intra macar?");
             User newUser = new User();
             Credentials newUserCredentials = new Credentials(input.getCredentials());
             newUser.setCredentials(newUserCredentials);
@@ -58,7 +58,7 @@ public final class Register implements Page {
             dataBase.getUsers().add(newUser);
             app.setCurrentPage(HomePageAutentificat.getInstance());
             app.setCurrentUser(newUser);
-            System.out.println("si crapa?");
+           //  System.out.println("si crapa?");
 
            return true;
         }

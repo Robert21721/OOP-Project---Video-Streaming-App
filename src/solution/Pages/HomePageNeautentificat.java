@@ -27,15 +27,9 @@ public final class HomePageNeautentificat implements Page {
 
     public boolean executeChangePage(ActionsInput input,AppLogic app, DataBase dataBase) {
         if (this.actionsChangePage.contains(input.getPage())) {
-            if (input.getPage().equals("logout")) {
-                app.setCurrentPage(HomePageNeautentificat.getInstance());
-                app.setCurrentUser(null);
-                return true;
-            }
             app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
             return true;
         }
-
         return false;
     }
 
