@@ -45,9 +45,12 @@ public final class HomePageAutentificat implements Page {
                         stream().
                         filter(movie -> !movie.getCountriesBanned().contains(app.getCurrentUser().getCredentials().getCountry())).
                         collect(Collectors.toCollection(ArrayList::new));
-                // System.out.println(userMovies);
+
                 app.setCurrentMovies(userMovies);
+                // app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
             }
+
+            app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
             return true;
         }
 

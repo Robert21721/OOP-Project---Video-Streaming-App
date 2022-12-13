@@ -2,6 +2,7 @@ package solution.Pages;
 
 import input.files.ActionsInput;
 import org.w3c.dom.ls.LSOutput;
+import solution.ActionFunctions;
 import solution.AppLogic;
 import solution.DataBase;
 import solution.Movie;
@@ -22,7 +23,8 @@ public final class Movies implements Page {
         this.actionsChangePage = new ArrayList<>();
         this.actionsOnPage = new ArrayList<>();
 
-        // this.actionsChangePage.add("")
+        this.actionsChangePage.add("see details");
+
         this.actionsOnPage.add("search");
         this.actionsOnPage.add("filter");
     }
@@ -35,6 +37,20 @@ public final class Movies implements Page {
 
     @Override
     public boolean executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase) {
+        if (input.getPage().equals("logout")) {
+            app.setCurrentUser(null);
+            app.setCurrentPage(HomePageNeautentificat.getInstance());
+            return true;
+        }
+
+        if (this.actionsChangePage.contains(input.getPage())) {
+            if (input.getPage().equals("see details")) {
+                // todo
+            }
+
+            app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
+            return true;
+        }
         return false;
     }
 
