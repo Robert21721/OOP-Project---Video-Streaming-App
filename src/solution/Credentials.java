@@ -18,6 +18,14 @@ public final class Credentials {
         this.balance = c.getBalance();
     }
 
+    public Credentials(final Credentials c) {
+        this.name = c.getName();
+        this.password = c.getPassword();
+        this.accountType = c.getAccountType();
+        this.country = c.getCountry();
+        this.balance = c.getBalance();
+    }
+
     public String getName() {
         return name;
     }

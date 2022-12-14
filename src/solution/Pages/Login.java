@@ -26,7 +26,7 @@ public final class Login implements Page {
         return  singletonInstance;
     }
 
-    public boolean executeChangePage(ActionsInput input,AppLogic app, DataBase dataBase) {
+    public boolean executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase) {
         return false;
     }
 
@@ -40,8 +40,8 @@ public final class Login implements Page {
     private boolean userLogin(ActionsInput input, AppLogic app, DataBase dataBase) {
         User user = dataBase.getUsers().
                 stream().
-                filter(u -> u.getCredentials().getName().equals(input.getCredentials().getName()) &&
-                        u.getCredentials().getPassword().equals(input.getCredentials().getPassword())).
+                filter(u -> (u.getCredentials().getName().equals(input.getCredentials().getName()) &&
+                        u.getCredentials().getPassword().equals(input.getCredentials().getPassword()))).
                 findFirst().
                 orElse(null);
 

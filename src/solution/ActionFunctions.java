@@ -18,6 +18,9 @@ public class ActionFunctions {
 
             case "upgrades":
                 return Upgrades.getInstance();
+
+            case "see details":
+                return SeeDetails.getInstance();
         }
 
         return null;

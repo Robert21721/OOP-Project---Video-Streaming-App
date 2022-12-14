@@ -3,11 +3,11 @@ import input.files.Input;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import solution.AppLogic;
-import solution.DataBase;
+import solution.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -19,34 +19,38 @@ public class Main {
         DataBase dataBase = new DataBase(inputData);
         AppLogic appLogic = new AppLogic();
 
-        // System.out.printf("ceva\n");
+        ArrayList<Movie> errorMovieList = new ArrayList<>();
+        User errorUser = null;
 
         for (ActionsInput action : inputData.getActions()) {
-            // System.out.println(appLogic.getCurrentPage());
-            // System.out.println(appLogic.getCurrentUser());
 
             if (action.getType().equals("change page")) {
                 if (!appLogic.getCurrentPage().executeChangePage(action, appLogic, dataBase)) {
                     output.addObject().put("error", "Error").
-                            putPOJO("currentMoviesList", appLogic.getCurrentMovies()).
-                            putPOJO("currentUser", null);
-                } else if (action.getPage().equals("movies")) {
+                            putPOJO("currentMoviesList", errorMovieList).
+                            putPOJO("currentUser", errorUser);
+                } else if (action.getPage().equals("movies") || action.getPage().equals("see details")) {
+                    AppLogic copy = new AppLogic(appLogic);
+
                     output.addObject().putPOJO("error", null).
-                            putPOJO("currentMoviesList", appLogic.getCurrentMovies()).
-                            putPOJO("currentUser", appLogic.getCurrentUser());
+                            putPOJO("currentMoviesList", copy.getCurrentMovies()).
+                            putPOJO("currentUser", copy.getCurrentUser());
                 }
-
-
             }
 
             if (action.getType().equals("on page")) {
                if (appLogic.getCurrentPage().executeOnPage(action, appLogic, dataBase)) {
-                   output.addObject().putPOJO("error", null).
-                           putPOJO("currentMoviesList", appLogic.getCurrentMovies()).
-                           putPOJO("currentUser", appLogic.getCurrentUser());
+                   if (!action.getFeature().equals("buy tokens") &&
+                           !action.getFeature().equals("buy premium account")) {
+                       AppLogic copy = new AppLogic(appLogic);
+
+                       output.addObject().putPOJO("error", null).
+                               putPOJO("currentMoviesList", copy.getCurrentMovies()).
+                               putPOJO("currentUser", copy.getCurrentUser());
+                   }
                } else {
                    output.addObject().put("error", "Error").
-                           putPOJO("currentMoviesList", appLogic.getCurrentMovies()).
+                           putPOJO("currentMoviesList", errorMovieList).
                            putPOJO("currentUser", null);
                }
             }
@@ -56,3 +60,5 @@ public class Main {
         objectWriter.writeValue(new File(args[1]), output);
     }
 }
+
+

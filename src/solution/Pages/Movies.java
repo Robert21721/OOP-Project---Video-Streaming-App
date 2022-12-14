@@ -24,6 +24,7 @@ public final class Movies implements Page {
         this.actionsOnPage = new ArrayList<>();
 
         this.actionsChangePage.add("see details");
+        this.actionsChangePage.add("movies");
 
         this.actionsOnPage.add("search");
         this.actionsOnPage.add("filter");
@@ -40,12 +41,34 @@ public final class Movies implements Page {
         if (input.getPage().equals("logout")) {
             app.setCurrentUser(null);
             app.setCurrentPage(HomePageNeautentificat.getInstance());
+            app.getCurrentMovies().clear();
             return true;
         }
 
         if (this.actionsChangePage.contains(input.getPage())) {
             if (input.getPage().equals("see details")) {
-                // todo
+
+                Movie movie = app.getCurrentMovies().
+                        stream().
+                        filter(m -> m.getName().equals(input.getMovie())).
+                        findFirst().
+                        orElse(null);
+
+                if (movie == null) {
+                    return false;
+                }
+
+                app.getCurrentMovies().clear();
+                app.getCurrentMovies().add(movie);
+            }
+
+            if (input.getPage().equals("movies")) {
+                ArrayList<Movie> userMovies = dataBase.getMovies().
+                        stream().
+                        filter(movie -> !movie.getCountriesBanned().contains(app.getCurrentUser().getCredentials().getCountry())).
+                        collect(Collectors.toCollection(ArrayList::new));
+
+                app.setCurrentMovies(userMovies);
             }
 
             app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
@@ -63,7 +86,6 @@ public final class Movies implements Page {
                     break;
 
                 case "filter":
-                    System.out.println("neatza sefu");
                     filter(input, app, dataBase);
                     break;
             }
@@ -96,9 +118,11 @@ public final class Movies implements Page {
         ArrayList<String> inputActors;
         ArrayList<String> inputGenre;
 
+
         if (input.getFilters().getContains() != null) {
             inputActors = input.getFilters().getContains().getActors();
             inputGenre = input.getFilters().getContains().getGenre();
+
         } else {
             inputGenre = null;
             inputActors = null;
@@ -106,30 +130,70 @@ public final class Movies implements Page {
 
         userMovies = userMovies.
                 stream().
-                filter(movie -> (inputActors == null || movie.getActors().containsAll(inputActors) &&
+                filter(movie -> ((inputActors == null || movie.getActors().containsAll(inputActors)) &&
                         (inputGenre == null || movie.getGenres().containsAll(inputGenre)))).
                 collect(Collectors.toCollection(ArrayList::new));
 
-        if (input.getFilters().getSort().getRating().equals("increasing") &&
-                input.getFilters().getSort().getDuration().equals("increasing")) {
-            Collections.sort(userMovies, new ComparatorIncrIncr());
+        if (input.getFilters().getSort() == null) {
+            app.setCurrentMovies(userMovies);
+            return;
         }
 
-        if (input.getFilters().getSort().getRating().equals("increasing") &&
-                input.getFilters().getSort().getDuration().equals("decreasing")) {
-            Collections.sort(userMovies, new ComparatorIncrDecr());
+        if (input.getFilters().getSort().getRating() == null) {
+            if (input.getFilters().getSort().getDuration().equals("increasing")) {
+                userMovies.sort((m1, m2) -> m1.getDuration() - m2.getDuration());
+                app.setCurrentMovies(userMovies);
+                return;
+            }
+
+            if (input.getFilters().getSort().getDuration().equals("decreasing")) {
+                userMovies.sort((m1, m2) -> m2.getDuration() - m1.getDuration());
+                app.setCurrentMovies(userMovies);
+                return;
+            }
         }
 
-        if (input.getFilters().getSort().getRating().equals("decreasing") &&
-                input.getFilters().getSort().getDuration().equals("increasing")) {
-            Collections.sort(userMovies, new ComparatorDecrIncr());
+        if (input.getFilters().getSort().getDuration() == null) {
+            if (input.getFilters().getSort().getRating().equals("increasing")) {
+                userMovies.sort((m1, m2) -> Double.compare(m1.getRating(), m2.getRating()));
+                app.setCurrentMovies(userMovies);
+                return;
+            }
+
+            if (input.getFilters().getSort().getRating().equals("decreasing")) {
+                userMovies.sort((m1, m2) -> Double.compare(m2.getRating(), m1.getRating()));
+                app.setCurrentMovies(userMovies);
+                return;
+            }
         }
 
-        if (input.getFilters().getSort().getRating().equals("decreasing") &&
-                input.getFilters().getSort().getDuration().equals("decreasing")) {
-            Collections.sort(userMovies, new ComparatorDecrDecr());
+
+        if (input.getFilters().getSort().getRating().equals("increasing")) {
+            if (input.getFilters().getSort().getDuration().equals("increasing")) {
+                Collections.sort(userMovies, new ComparatorIncrIncr());
+                app.setCurrentMovies(userMovies);
+                return;
+            }
+
+              if (input.getFilters().getSort().getDuration().equals("decreasing")) {
+                  Collections.sort(userMovies, new ComparatorIncrDecr());
+                  app.setCurrentMovies(userMovies);
+                  return;
+              }
         }
 
-        app.setCurrentMovies(userMovies);
+        if (input.getFilters().getSort().getRating().equals("decreasing")) {
+            if (input.getFilters().getSort().getDuration().equals("increasing")) {
+                Collections.sort(userMovies, new ComparatorDecrIncr());
+                app.setCurrentMovies(userMovies);
+                return;
+            }
+
+            if (input.getFilters().getSort().getDuration().equals("decreasing")) {
+                Collections.sort(userMovies, new ComparatorDecrDecr());
+                app.setCurrentMovies(userMovies);
+                return;
+            }
+        }
     }
 }

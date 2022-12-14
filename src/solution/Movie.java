@@ -1,8 +1,13 @@
 package solution;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import input.files.MoviesInput;
 
 import java.util.ArrayList;
+@JsonIgnoreProperties(value = {
+        "ratings"
+})
+
 public final class Movie {
     private String name;
     private int year;
@@ -10,6 +15,7 @@ public final class Movie {
     private ArrayList<String> genres;
     private ArrayList<String> actors;
     private ArrayList<String> countriesBanned;
+    private ArrayList<Integer> ratings;
     private int numLikes;
     private double rating;
     private int  numRatings;
@@ -21,9 +27,34 @@ public final class Movie {
         this.genres = new ArrayList<>();
         this.actors = new ArrayList<>();
         this.countriesBanned = new ArrayList<>();
+        this.ratings = new ArrayList<>();
         this.numLikes = 0;
         this.rating = 0.00f;
         this.numRatings = 0;
+
+        for (String genre : m.getGenres()) {
+            this.genres.add(genre);
+        }
+
+        for (String actor : m.getActors()) {
+            this.actors.add(actor);
+        }
+
+        for (String countryBanned : m.getCountriesBanned()) {
+            this.countriesBanned.add(countryBanned);
+        }
+    }
+
+    public Movie(final Movie m) {
+        this.name = m.getName();
+        this.year = m.getYear();
+        this.duration = m.getDuration();
+        this.genres = new ArrayList<>();
+        this.actors = new ArrayList<>();
+        this.countriesBanned = new ArrayList<>();
+        this.numLikes = m.getNumLikes();
+        this.rating = m.getRating();
+        this.numRatings = m.getNumRatings();
 
         for (String genre : m.getGenres()) {
             this.genres.add(genre);
@@ -110,6 +141,14 @@ public final class Movie {
         this.numRatings = numRatings;
     }
 
+    public ArrayList<Integer> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(ArrayList<Integer> ratings) {
+        this.ratings = ratings;
+    }
+
     @Override
     public String toString() {
         return "{ name: " + this.name +
@@ -118,6 +157,10 @@ public final class Movie {
             ", genres: " + this.genres +
             ", actors: " + this.actors +
             ", countriesBanned: " + this.countriesBanned +
+            ", ratings: " + this.rating +
+            ", numLikes: " + this.numLikes +
+            ", rating: " + rating +
+            ", numRatings: " + numRatings +
             " }";
     }
 }

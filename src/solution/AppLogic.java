@@ -17,6 +17,16 @@ public final class AppLogic {
         this.currentUser = null;
     }
 
+    public AppLogic(AppLogic a) {
+        this.currentPage = a.getCurrentPage();
+        this.currentUser = new User(a.getCurrentUser());
+        this.currentMovies = new ArrayList<>();
+
+        for (Movie m : a.getCurrentMovies()) {
+            this.currentMovies.add(new Movie(m));
+        }
+    }
+
     public Page getCurrentPage() {
         return currentPage;
     }
