@@ -16,7 +16,6 @@ public final class DataBase {
     public DataBase(final Input input) {
         ArrayList<UsersInput> usersInput = input.getUsers();
         ArrayList<MoviesInput> moviesInput = input.getMovies();
-        ArrayList<ActionsInput> actionsInput = input.getActions();
 
         this.users = new ArrayList<>();
         this.movies = new ArrayList<>();

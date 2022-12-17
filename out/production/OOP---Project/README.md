@@ -69,6 +69,26 @@
 >   * from this page, he can log out (the current user is set to null, the movie list is clear
       and the current page is set to HomePageNeautentificat)
 >   * he can change page to movies or upgrades and the movie list and current page are updated
-> * **Movies** - 
-> * **SeeDetails** - 
-> * **Upgrades** - 
+> * **Movies** - when the user enter this page, the currentMovie list will be fill with all the
+        movies allowed in user's country.
+>  * this page is a singleton
+>  * for change page to "see details", if the specified movie exists, il will be put in the
+       current movie list by itself, otherwise the program throw an error
+>  * search action try to find a movie by its name. If the name starts with the given input,
+       the program will add the movie in currentMovie list by itself
+>  * search action verify what fields has received and use the right comparator( or a lambda expression)
+       and the sort method
+>  * logout action - same as above
+> * **SeeDetails** - on this page you have only one movie on the currentMovie list
+        and you purchase, watch, like and rate the movie
+>   * this page is a singleton
+>   * for the 4 actions mentioned above, we verify if we respect the chronological order
+        of events using 4 arrayLists and we check if the movie exists in the previous list
+>   * logout and change to movies page are the same as above
+> * **Upgrades** - the user can buy tokens or switch to premium account on this page
+>   * this page is a singleton
+>   * verify if the user has enough balance or tokens before making the action
+>   * logout and change to movies page are the same as above
+
+!! All the pages have in common the Page interface methods but each page has its own private
+methods that are called from executeChangePage and executeOnPage.

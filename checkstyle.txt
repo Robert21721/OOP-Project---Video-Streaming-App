@@ -8,8 +8,9 @@ Starting audit...
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/solution/pages/Upgrades.java:73:54: '10' is a magic number. [MagicNumber]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/solution/pages/Upgrades.java:74:90: '10' is a magic number. [MagicNumber]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/solution/ActionFunctions.java:3:22: Using the '.*' form of import should be avoided - solution.pages.*. [AvoidStarImport]
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/solution/data/DataBase.java:3:8: Unused import - input.files.ActionsInput. [UnusedImports]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/Main.java:6:16: Using the '.*' form of import should be avoided - solution.*. [AvoidStarImport]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/Main.java:13:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project/./src/Main.java:14:5: Missing a Javadoc comment. [MissingJavadocMethod]
 Audit done.
-Checkstyle ends with 12 errors.
+Checkstyle ends with 13 errors.
