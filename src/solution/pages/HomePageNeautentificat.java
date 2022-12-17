@@ -1,9 +1,9 @@
-package solution.Pages;
+package solution.pages;
 
 import input.files.ActionsInput;
 import solution.ActionFunctions;
 import solution.AppLogic;
-import solution.DataBase;
+import solution.data.DataBase;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,11 @@ public final class HomePageNeautentificat implements Page {
         this.actionsChangePage.add("login");
         this.actionsChangePage.add("register");
     }
+
+    /**
+     * singleton for "homePage Neautentificat" page
+     * @return an instance of "homePage Neautentificat" class
+     */
     public static HomePageNeautentificat getInstance() {
         if (singletonInstance == null) {
             singletonInstance = new HomePageNeautentificat();
@@ -25,7 +30,9 @@ public final class HomePageNeautentificat implements Page {
         return  singletonInstance;
     }
 
-    public boolean executeChangePage(ActionsInput input,AppLogic app, DataBase dataBase) {
+    @Override
+    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase) {
         if (this.actionsChangePage.contains(input.getPage())) {
             app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
             return true;
@@ -33,7 +40,9 @@ public final class HomePageNeautentificat implements Page {
         return false;
     }
 
-    public boolean executeOnPage(ActionsInput input,AppLogic app, DataBase dataBase) {
+    @Override
+    public boolean executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase) {
             return false;
         }
 }

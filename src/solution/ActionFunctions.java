@@ -1,11 +1,15 @@
 package solution;
 
-import solution.Pages.*;
+import solution.pages.*;
 
-public class ActionFunctions {
+public final class ActionFunctions {
     private ActionFunctions() { }
 
-    public static Page changePage(String pageName) {
+    /**
+     * receives as a parameter the name of a page and
+     * returns an instance of the corresponding page
+     */
+    public static Page changePage(final String pageName) {
         switch (pageName) {
             case "login":
                 return Login.getInstance();
@@ -21,8 +25,9 @@ public class ActionFunctions {
 
             case "see details":
                 return SeeDetails.getInstance();
-        }
 
-        return null;
+            default:
+                return null;
+        }
     }
 }

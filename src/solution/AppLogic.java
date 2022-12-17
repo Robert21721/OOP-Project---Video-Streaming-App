@@ -1,9 +1,7 @@
 package solution;
 
-import solution.Pages.HomePageNeautentificat;
-import solution.Pages.Movies;
-import solution.Pages.Page;
-
+import solution.pages.HomePageNeautentificat;
+import solution.pages.Page;
 import java.util.ArrayList;
 
 public final class AppLogic {
@@ -17,7 +15,7 @@ public final class AppLogic {
         this.currentUser = null;
     }
 
-    public AppLogic(AppLogic a) {
+    public AppLogic(final AppLogic a) {
         this.currentPage = a.getCurrentPage();
         this.currentUser = new User(a.getCurrentUser());
         this.currentMovies = new ArrayList<>();
@@ -47,7 +45,7 @@ public final class AppLogic {
         return currentMovies;
     }
 
-    public void setCurrentMovies(ArrayList<Movie> currentMovies) {
+    public void setCurrentMovies(final ArrayList<Movie> currentMovies) {
         this.currentMovies = currentMovies;
     }
 }

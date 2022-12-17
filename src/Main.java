@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import solution.*;
+import solution.data.DataBase;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Input inputData = objectMapper.readValue(new File(args[0]), Input.class);
 
@@ -29,7 +30,8 @@ public class Main {
                     output.addObject().put("error", "Error").
                             putPOJO("currentMoviesList", errorMovieList).
                             putPOJO("currentUser", errorUser);
-                } else if (action.getPage().equals("movies") || action.getPage().equals("see details")) {
+                } else if (action.getPage().equals("movies")
+                        || action.getPage().equals("see details")) {
                     AppLogic copy = new AppLogic(appLogic);
 
                     output.addObject().putPOJO("error", null).
@@ -40,8 +42,8 @@ public class Main {
 
             if (action.getType().equals("on page")) {
                if (appLogic.getCurrentPage().executeOnPage(action, appLogic, dataBase)) {
-                   if (!action.getFeature().equals("buy tokens") &&
-                           !action.getFeature().equals("buy premium account")) {
+                   if (!action.getFeature().equals("buy tokens")
+                           && !action.getFeature().equals("buy premium account")) {
                        AppLogic copy = new AppLogic(appLogic);
 
                        output.addObject().putPOJO("error", null).

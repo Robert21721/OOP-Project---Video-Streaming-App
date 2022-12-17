@@ -1,11 +1,9 @@
-package solution.Pages;
+package solution.pages;
 
 import input.files.ActionsInput;
 import solution.ActionFunctions;
 import solution.AppLogic;
-import solution.DataBase;
-import solution.Movie;
-
+import solution.data.DataBase;
 import java.util.ArrayList;
 
 public final class Upgrades implements Page {
@@ -22,6 +20,11 @@ public final class Upgrades implements Page {
         this.actionsOnPage.add("buy tokens");
         this.actionsOnPage.add("buy premium account");
     }
+
+    /**
+     * singleton for "Updates" page
+     * @return an instance of "Updates" class
+     */
     public static Upgrades getInstance() {
         if (singletonInstance == null) {
             singletonInstance = new Upgrades();
@@ -30,7 +33,8 @@ public final class Upgrades implements Page {
     }
 
     @Override
-    public boolean executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase) {
         if (input.getPage().equals("logout")) {
             app.setCurrentUser(null);
             app.setCurrentPage(HomePageNeautentificat.getInstance());
@@ -46,18 +50,26 @@ public final class Upgrades implements Page {
     }
 
     @Override
-    public boolean executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    public boolean executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase) {
         switch (input.getFeature()) {
             case "buy tokens":
-                return buyTockens(input, app, dataBase);
+                return buyTokens(input, app);
 
             case "buy premium account":
-                return buyPremiumAccount(input, app, dataBase);
+                return buyPremiumAccount(app);
+
+            default:
+                return false;
         }
-        return false;
     }
 
-    private boolean buyPremiumAccount(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * method that allows the user to buy a premium account
+     * @param app - the app logic
+     * @return true if the user can buy the premium account, false otherwise
+     */
+    private boolean buyPremiumAccount(final AppLogic app) {
         if (app.getCurrentUser().getTokensCount() >= 10) {
             app.getCurrentUser().setTokensCount(app.getCurrentUser().getTokensCount()  - 10);
             app.getCurrentUser().getCredentials().setAccountType("premium");
@@ -66,7 +78,13 @@ public final class Upgrades implements Page {
         return false;
     }
 
-    private boolean buyTockens(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * method that allows the user to buy tokens
+     * @param input - current action
+     * @param app - the app logic
+     * @return true if the user can buy tokens, false otherwise
+     */
+    private boolean buyTokens(final ActionsInput input, final AppLogic app) {
 
         int balance = Integer.parseInt(app.getCurrentUser().getCredentials().getBalance());
         int nrTokens = input.getCount();

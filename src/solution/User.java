@@ -1,7 +1,7 @@
 package solution;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import input.files.UsersInput;
+import solution.data.Credentials;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,6 @@ public final class User {
     private Credentials credentials;
     private int tokensCount;
     private int numFreePremiumMovies;
-    // private Movie currentMovie;
     private ArrayList<Movie> purchasedMovies;
     private ArrayList<Movie> watchedMovies;
     private ArrayList<Movie> likedMovies;
@@ -20,14 +19,13 @@ public final class User {
         this.credentials = new Credentials();
         this.tokensCount = 0;
         this.numFreePremiumMovies = 15;
-        // this.currentMovie = null;
         this.purchasedMovies = new ArrayList<>();
         this.watchedMovies = new ArrayList<>();
         this.likedMovies = new ArrayList<>();
         this.ratedMovies = new ArrayList<>();
     }
 
-    public User (User u) {
+    public User(final User u) {
         this.credentials = new Credentials(u.getCredentials());
         this.tokensCount = u.getTokensCount();
         this.numFreePremiumMovies = u.getNumFreePremiumMovies();
@@ -56,7 +54,6 @@ public final class User {
         this.credentials = new Credentials(u.getCredentials());
         this.tokensCount = 0;
         this.numFreePremiumMovies = 15;
-        // this.currentMovie = null;
         this.purchasedMovies = new ArrayList<>();
         this.watchedMovies = new ArrayList<>();
         this.likedMovies = new ArrayList<>();
@@ -67,7 +64,7 @@ public final class User {
         return credentials;
     }
 
-    public void setCredentials(Credentials credentials) {
+    public void setCredentials(final Credentials credentials) {
         this.credentials = credentials;
     }
 
@@ -75,7 +72,7 @@ public final class User {
         return tokensCount;
     }
 
-    public void setTokensCount(int tokensCount) {
+    public void setTokensCount(final int tokensCount) {
         this.tokensCount = tokensCount;
     }
 
@@ -83,7 +80,7 @@ public final class User {
         return numFreePremiumMovies;
     }
 
-    public void setNumFreePremiumMovies(int numFreePremiumMovies) {
+    public void setNumFreePremiumMovies(final int numFreePremiumMovies) {
         this.numFreePremiumMovies = numFreePremiumMovies;
     }
 
@@ -91,7 +88,7 @@ public final class User {
         return purchasedMovies;
     }
 
-    public void setPurchasedMovies(ArrayList<Movie> purchasedMovies) {
+    public void setPurchasedMovies(final ArrayList<Movie> purchasedMovies) {
         this.purchasedMovies = purchasedMovies;
     }
 
@@ -99,7 +96,7 @@ public final class User {
         return watchedMovies;
     }
 
-    public void setWatchedMovies(ArrayList<Movie> watchedMovies) {
+    public void setWatchedMovies(final ArrayList<Movie> watchedMovies) {
         this.watchedMovies = watchedMovies;
     }
 
@@ -107,7 +104,7 @@ public final class User {
         return likedMovies;
     }
 
-    public void setLikedMovies(ArrayList<Movie> likedMovies) {
+    public void setLikedMovies(final ArrayList<Movie> likedMovies) {
         this.likedMovies = likedMovies;
     }
 
@@ -115,26 +112,18 @@ public final class User {
         return ratedMovies;
     }
 
-    public void setRatedMovies(ArrayList<Movie> ratedMovies) {
+    public void setRatedMovies(final ArrayList<Movie> ratedMovies) {
         this.ratedMovies = ratedMovies;
     }
 
-//    public Movie getCurrentMovie() {
-//        return currentMovie;
-//    }
-//
-//    public void setCurrentMovie(Movie currentMovie) {
-//        this.currentMovie = currentMovie;
-//    }
-
     @Override
     public String toString() {
-        return "credentials: { " +
-            "name : " + this.credentials.getName() +
-            ", password: " + this.credentials.getPassword() +
-            ", accountType: " + this.credentials.getAccountType() +
-            ", country: " + this.credentials.getCountry() +
-            ", balance: " + this.credentials.getBalance() +
-        " }";
+        return "credentials: { "
+                + "name : " + this.credentials.getName()
+                + ", password: " + this.credentials.getPassword()
+                + ", accountType: " + this.credentials.getAccountType()
+                + ", country: " + this.credentials.getCountry()
+                + ", balance: " + this.credentials.getBalance()
+                + " }";
     }
 }

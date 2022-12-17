@@ -1,10 +1,9 @@
-package solution.Pages;
+package solution.pages;
 
 import input.files.ActionsInput;
-import org.w3c.dom.ls.LSOutput;
 import solution.ActionFunctions;
 import solution.AppLogic;
-import solution.DataBase;
+import solution.data.DataBase;
 import solution.Movie;
 import solution.comparators.ComparatorDecrDecr;
 import solution.comparators.ComparatorDecrIncr;
@@ -29,6 +28,11 @@ public final class Movies implements Page {
         this.actionsOnPage.add("search");
         this.actionsOnPage.add("filter");
     }
+
+    /**
+     * singleton for "Movies" page
+     * @return an instance of "Movies" class
+     */
     public static Movies getInstance() {
         if (singletonInstance == null) {
             singletonInstance = new Movies();
@@ -37,7 +41,8 @@ public final class Movies implements Page {
     }
 
     @Override
-    public boolean executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase) {
         if (input.getPage().equals("logout")) {
             app.setCurrentUser(null);
             app.setCurrentPage(HomePageNeautentificat.getInstance());
@@ -65,7 +70,8 @@ public final class Movies implements Page {
             if (input.getPage().equals("movies")) {
                 ArrayList<Movie> userMovies = dataBase.getMovies().
                         stream().
-                        filter(movie -> !movie.getCountriesBanned().contains(app.getCurrentUser().getCredentials().getCountry())).
+                        filter(movie -> !movie.getCountriesBanned()
+                                .contains(app.getCurrentUser().getCredentials().getCountry())).
                         collect(Collectors.toCollection(ArrayList::new));
 
                 app.setCurrentMovies(userMovies);
@@ -78,7 +84,8 @@ public final class Movies implements Page {
     }
 
     @Override
-    public boolean executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    public boolean executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase) {
         if (this.actionsOnPage.contains(input.getFeature())) {
             switch (input.getFeature()) {
                 case "search":
@@ -88,6 +95,8 @@ public final class Movies implements Page {
                 case "filter":
                     filter(input, app, dataBase);
                     break;
+
+                default:
             }
 
             return true;
@@ -95,10 +104,18 @@ public final class Movies implements Page {
         return false;
     }
 
-    private void search(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * search a movie in the list and update the currentMovies list
+     * @param input - current action
+     * @param app - the app logic
+     * @param dataBase - database where movies and users are stored
+     */
+    private void search(final ActionsInput input, final AppLogic app,
+                        final DataBase dataBase) {
         ArrayList<Movie> userMovies = dataBase.getMovies().
                 stream().
-                filter(movie -> !movie.getCountriesBanned().contains(app.getCurrentUser().getCredentials().getCountry())).
+                filter(movie -> !movie.getCountriesBanned()
+                        .contains(app.getCurrentUser().getCredentials().getCountry())).
                 collect(Collectors.toCollection(ArrayList::new));
 
         userMovies = userMovies.
@@ -108,11 +125,19 @@ public final class Movies implements Page {
         app.setCurrentMovies(userMovies);
     }
 
-    private void filter(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * filter the currentMovies list according to some criteria
+     * @param input - current action
+     * @param app - the app logic
+     * @param dataBase - database where movies and users are stored
+     */
+    private void filter(final ActionsInput input, final AppLogic app,
+                        final DataBase dataBase) {
         ArrayList<Movie> userMovies = dataBase.
                 getMovies().
                 stream().
-                filter(movie -> !movie.getCountriesBanned().contains(app.getCurrentUser().getCredentials().getCountry())).
+                filter(movie -> !movie.getCountriesBanned()
+                        .contains(app.getCurrentUser().getCredentials().getCountry())).
                 collect(Collectors.toCollection(ArrayList::new));
 
         ArrayList<String> inputActors;
@@ -130,8 +155,8 @@ public final class Movies implements Page {
 
         userMovies = userMovies.
                 stream().
-                filter(movie -> ((inputActors == null || movie.getActors().containsAll(inputActors)) &&
-                        (inputGenre == null || movie.getGenres().containsAll(inputGenre)))).
+                filter(movie -> ((inputActors == null || movie.getActors().containsAll(inputActors))
+                        && (inputGenre == null || movie.getGenres().containsAll(inputGenre)))).
                 collect(Collectors.toCollection(ArrayList::new));
 
         if (input.getFilters().getSort() == null) {

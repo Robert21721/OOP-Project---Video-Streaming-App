@@ -1,13 +1,11 @@
-package solution.Pages;
+package solution.pages;
 
 import input.files.ActionsInput;
 import solution.ActionFunctions;
 import solution.AppLogic;
-import solution.DataBase;
+import solution.data.DataBase;
 import solution.Movie;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public final class HomePageAutentificat implements Page {
@@ -22,6 +20,11 @@ public final class HomePageAutentificat implements Page {
         this.actionsChangePage.add("movies");
         this.actionsChangePage.add("upgrades");
     }
+
+    /**
+     * singleton for "homePage Autentificat" page
+     * @return an instance of "homePage Autentificat" class
+     */
     public static HomePageAutentificat getInstance() {
         if (singletonInstance == null) {
             singletonInstance = new HomePageAutentificat();
@@ -30,7 +33,8 @@ public final class HomePageAutentificat implements Page {
     }
 
     @Override
-    public boolean executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase) {
         if (input.getPage().equals("logout")) {
             app.setCurrentUser(null);
             app.setCurrentPage(HomePageNeautentificat.getInstance());
@@ -41,7 +45,8 @@ public final class HomePageAutentificat implements Page {
         if (this.actionsChangePage.contains(input.getPage())) {
             ArrayList<Movie> userMovies = dataBase.getMovies().
                         stream().
-                        filter(movie -> !movie.getCountriesBanned().contains(app.getCurrentUser().getCredentials().getCountry())).
+                        filter(movie -> !movie.getCountriesBanned()
+                                .contains(app.getCurrentUser().getCredentials().getCountry())).
                         collect(Collectors.toCollection(ArrayList::new));
 
                 app.setCurrentMovies(userMovies);
@@ -54,7 +59,8 @@ public final class HomePageAutentificat implements Page {
     }
 
     @Override
-    public boolean executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    public boolean executeOnPage(final ActionsInput input,
+                                 final AppLogic app, final DataBase dataBase) {
         return false;
     }
 }

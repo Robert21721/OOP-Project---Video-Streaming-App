@@ -1,7 +1,8 @@
-package solution.Pages;
+package solution.pages;
 
 import input.files.ActionsInput;
 import solution.*;
+import solution.data.DataBase;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -22,6 +23,11 @@ public final class SeeDetails implements Page {
         this.actionsOnPage.add("like");
         this.actionsOnPage.add("rate");
     }
+
+    /**
+     * singleton for "see details" page
+     * @return an instance of "see details" class
+     */
     public static SeeDetails getInstance() {
         if (singletonInstance == null) {
             singletonInstance = new SeeDetails();
@@ -30,7 +36,8 @@ public final class SeeDetails implements Page {
     }
 
     @Override
-    public boolean executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase) {
         if (input.getPage().equals("logout")) {
             app.setCurrentUser(null);
             app.setCurrentPage(HomePageNeautentificat.getInstance());
@@ -43,7 +50,8 @@ public final class SeeDetails implements Page {
 
                 ArrayList<Movie> userMovies = dataBase.getMovies().
                         stream().
-                        filter(movie -> !movie.getCountriesBanned().contains(app.getCurrentUser().getCredentials().getCountry())).
+                        filter(movie -> !movie.getCountriesBanned()
+                                .contains(app.getCurrentUser().getCredentials().getCountry())).
                         collect(Collectors.toCollection(ArrayList::new));
 
                 app.setCurrentMovies(userMovies);
@@ -56,24 +64,32 @@ public final class SeeDetails implements Page {
     }
 
     @Override
-    public boolean executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    public boolean executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase) {
         switch (input.getFeature()) {
             case "purchase":
-                return purchase(input, app, dataBase);
+                return purchase(app);
 
             case "watch":
-                return watch(input, app, dataBase);
+                return watch(app);
 
             case "like":
-                return like(input, app, dataBase);
+                return like(app);
 
             case "rate":
-                return rateTheMovie(input, app, dataBase);
+                return rateTheMovie(input, app);
+
+            default:
+                return false;
         }
-        return false;
     }
 
-    private boolean purchase(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * method that allows the user to buy a movie
+     * @param app - app logic
+     * @return true if the movie can be purchased, false otherwise
+     */
+    private boolean purchase(final AppLogic app) {
         User user = app.getCurrentUser();
         if (user.getCredentials().getAccountType().equals("premium")) {
             if (user.getNumFreePremiumMovies() > 0) {
@@ -98,7 +114,12 @@ public final class SeeDetails implements Page {
         return false;
     }
 
-    private boolean watch(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * method that allows the user to watch a movie
+     * @param app - app logic
+     * @return true if the movie can be watched, false otherwise
+     */
+    private boolean watch(final AppLogic app) {
         Movie movie = app.getCurrentMovies().get(0);
 
         if (app.getCurrentUser().getPurchasedMovies().contains(movie)) {
@@ -108,7 +129,12 @@ public final class SeeDetails implements Page {
         return false;
     }
 
-    private boolean like(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * method that allows the user to like a movie
+     * @param app - app logic
+     * @return true if the movie can be liked, false otherwise
+     */
+    private boolean like(final AppLogic app) {
         Movie movie = app.getCurrentMovies().get(0);
 
         if (app.getCurrentUser().getWatchedMovies().contains(movie)) {
@@ -119,7 +145,13 @@ public final class SeeDetails implements Page {
         return false;
     }
 
-    private boolean rateTheMovie(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * method that allows the user to rate a movie
+     * @param input - current action
+     * @param app - the app logic
+     * @return true if the movie can be rated, false otherwise
+     */
+    private boolean rateTheMovie(final ActionsInput input, final AppLogic app) {
         Movie movie = app.getCurrentMovies().get(0);
 
         if (input.getRate() > 5) {

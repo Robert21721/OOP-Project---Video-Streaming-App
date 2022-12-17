@@ -1,12 +1,9 @@
-package solution.Pages;
+package solution.pages;
 
 import input.files.ActionsInput;
-import solution.ActionFunctions;
 import solution.AppLogic;
-import solution.DataBase;
+import solution.data.DataBase;
 import solution.User;
-
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 public final class Login implements Page {
@@ -19,6 +16,11 @@ public final class Login implements Page {
 
         this.actionsOnPage.add("login");
     }
+
+    /**
+     * singleton for "Login" page
+     * @return an instance of "Login" class
+     */
     public static Login getInstance() {
         if (singletonInstance == null) {
             singletonInstance = new Login();
@@ -26,22 +28,35 @@ public final class Login implements Page {
         return  singletonInstance;
     }
 
-    public boolean executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase) {
+    @Override
+    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase) {
         return false;
     }
 
-    public boolean executeOnPage(ActionsInput input,AppLogic app, DataBase dataBase) {
+    @Override
+    public boolean executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase) {
         if (this.actionsOnPage.contains(input.getFeature())) {
             return userLogin(input, app, dataBase);
         }
         return false;
     }
 
-    private boolean userLogin(ActionsInput input, AppLogic app, DataBase dataBase) {
+    /**
+     * method that allows the user to authenticate
+     * @param input - current action
+     * @param app - the app logic
+     * @param dataBase - database where movies and users are stored
+     * @return true if the login was successful, false otherwise
+     */
+    private boolean userLogin(final ActionsInput input, final AppLogic app,
+                              final DataBase dataBase) {
         User user = dataBase.getUsers().
                 stream().
-                filter(u -> (u.getCredentials().getName().equals(input.getCredentials().getName()) &&
-                        u.getCredentials().getPassword().equals(input.getCredentials().getPassword()))).
+                filter(u -> (u.getCredentials().getName().equals(input.getCredentials().getName())
+                        && u.getCredentials().getPassword().equals(input.getCredentials()
+                        .getPassword()))).
                 findFirst().
                 orElse(null);
 
