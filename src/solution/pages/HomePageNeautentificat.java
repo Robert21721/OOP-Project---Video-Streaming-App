@@ -1,7 +1,8 @@
 package solution.pages;
 
 import input.files.ActionsInput;
-import solution.ActionFunctions;
+import solution.Commands.ChangePageCommand;
+import solution.Factory;
 import solution.AppLogic;
 import solution.data.DataBase;
 
@@ -34,8 +35,8 @@ public final class HomePageNeautentificat implements Page {
     public boolean executeChangePage(final ActionsInput input, final AppLogic app,
                                      final DataBase dataBase) {
         if (this.actionsChangePage.contains(input.getPage())) {
-            app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
-            return true;
+            ChangePageCommand command = new ChangePageCommand(input.getPage());
+            return app.getEditor().edit(command, input, app, dataBase);
         }
         return false;
     }
@@ -43,6 +44,11 @@ public final class HomePageNeautentificat implements Page {
     @Override
     public boolean executeOnPage(final ActionsInput input, final AppLogic app,
                                  final DataBase dataBase) {
-            return false;
-        }
+        return false;
+    }
+
+    @Override
+    public String getPageName() {
+        return "homePage N";
+    }
 }

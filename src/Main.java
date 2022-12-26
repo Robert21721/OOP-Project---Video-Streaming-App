@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import solution.*;
+import solution.Commands.Editor;
 import solution.data.DataBase;
 
 import java.io.File;
@@ -32,6 +33,7 @@ public class Main {
                             putPOJO("currentUser", errorUser);
                 } else if (action.getPage().equals("movies")
                         || action.getPage().equals("see details")) {
+
                     AppLogic copy = new AppLogic(appLogic);
 
                     output.addObject().putPOJO("error", null).

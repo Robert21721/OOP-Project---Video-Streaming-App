@@ -1,7 +1,9 @@
 package solution.pages;
 
 import input.files.ActionsInput;
-import solution.ActionFunctions;
+import solution.Commands.ChangePageCommand;
+import solution.Commands.Command;
+import solution.Factory;
 import solution.AppLogic;
 import solution.data.DataBase;
 import solution.Movie;
@@ -24,6 +26,7 @@ public final class Movies implements Page {
 
         this.actionsChangePage.add("see details");
         this.actionsChangePage.add("movies");
+        this.actionsChangePage.add("logout");
 
         this.actionsOnPage.add("search");
         this.actionsOnPage.add("filter");
@@ -43,42 +46,9 @@ public final class Movies implements Page {
     @Override
     public boolean executeChangePage(final ActionsInput input, final AppLogic app,
                                      final DataBase dataBase) {
-        if (input.getPage().equals("logout")) {
-            app.setCurrentUser(null);
-            app.setCurrentPage(HomePageNeautentificat.getInstance());
-            app.getCurrentMovies().clear();
-            return true;
-        }
-
         if (this.actionsChangePage.contains(input.getPage())) {
-            if (input.getPage().equals("see details")) {
-
-                Movie movie = app.getCurrentMovies().
-                        stream().
-                        filter(m -> m.getName().equals(input.getMovie())).
-                        findFirst().
-                        orElse(null);
-
-                if (movie == null) {
-                    return false;
-                }
-
-                app.getCurrentMovies().clear();
-                app.getCurrentMovies().add(movie);
-            }
-
-            if (input.getPage().equals("movies")) {
-                ArrayList<Movie> userMovies = dataBase.getMovies().
-                        stream().
-                        filter(movie -> !movie.getCountriesBanned()
-                                .contains(app.getCurrentUser().getCredentials().getCountry())).
-                        collect(Collectors.toCollection(ArrayList::new));
-
-                app.setCurrentMovies(userMovies);
-            }
-
-            app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
-            return true;
+            Command command = new ChangePageCommand(input.getPage());
+            return app.getEditor().edit(command, input, app, dataBase);
         }
         return false;
     }
@@ -220,5 +190,10 @@ public final class Movies implements Page {
                 return;
             }
         }
+    }
+
+    @Override
+    public String getPageName() {
+        return "movies";
     }
 }

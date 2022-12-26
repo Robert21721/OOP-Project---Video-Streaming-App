@@ -2,6 +2,8 @@ package solution.pages;
 
 import input.files.ActionsInput;
 import solution.*;
+import solution.Commands.ChangePageCommand;
+import solution.Commands.Command;
 import solution.data.DataBase;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public final class SeeDetails implements Page {
 
         this.actionsChangePage.add("movies");
         this.actionsChangePage.add("upgrades");
+        this.actionsChangePage.add("logout");
 
         this.actionsOnPage.add("purchase");
         this.actionsOnPage.add("watch");
@@ -38,26 +41,13 @@ public final class SeeDetails implements Page {
     @Override
     public boolean executeChangePage(final ActionsInput input, final AppLogic app,
                                      final DataBase dataBase) {
-        if (input.getPage().equals("logout")) {
-            app.setCurrentUser(null);
-            app.setCurrentPage(HomePageNeautentificat.getInstance());
-            app.getCurrentMovies().clear();
-            return true;
-        }
-
         if (this.actionsChangePage.contains(input.getPage())) {
-            if (input.getPage().equals("movies")) {
-
-                ArrayList<Movie> userMovies = dataBase.getMovies().
-                        stream().
-                        filter(movie -> !movie.getCountriesBanned()
-                                .contains(app.getCurrentUser().getCredentials().getCountry())).
-                        collect(Collectors.toCollection(ArrayList::new));
-
-                app.setCurrentMovies(userMovies);
+            Command command = new ChangePageCommand(input.getPage());
+            if (!input.getPage().equals("upgrades")) {
+                return app.getEditor().edit(command, input, app, dataBase);
             }
 
-            app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
+            app.setCurrentPage(Factory.getPage(input.getPage()));
             return true;
         }
         return false;
@@ -91,24 +81,16 @@ public final class SeeDetails implements Page {
      */
     private boolean purchase(final AppLogic app) {
         User user = app.getCurrentUser();
-        if (user.getCredentials().getAccountType().equals("premium")) {
-            if (user.getNumFreePremiumMovies() > 0) {
+        if (user.getCredentials().getAccountType().equals("premium") && user.getNumFreePremiumMovies() > 0) {
                 user.setNumFreePremiumMovies(user.getNumFreePremiumMovies() - 1);
                 user.getPurchasedMovies().add(app.getCurrentMovies().get(0));
                 return true;
             }
 
-            if (user.getTokensCount() >= 2) {
-                user.setTokensCount(user.getTokensCount() - 2);
-                user.getPurchasedMovies().add(app.getCurrentMovies().get(0));
-                return true;
-            }
-        } else {
-            if (user.getTokensCount() >= 2) {
-                user.setTokensCount(user.getTokensCount() - 2);
-                user.getPurchasedMovies().add(app.getCurrentMovies().get(0));
-                return true;
-            }
+        if (user.getTokensCount() >= 2) {
+            user.setTokensCount(user.getTokensCount() - 2);
+            user.getPurchasedMovies().add(app.getCurrentMovies().get(0));
+            return true;
         }
 
         return false;
@@ -168,5 +150,10 @@ public final class SeeDetails implements Page {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String getPageName() {
+        return "see details";
     }
 }

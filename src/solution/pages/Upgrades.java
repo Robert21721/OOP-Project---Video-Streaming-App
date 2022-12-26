@@ -1,7 +1,9 @@
 package solution.pages;
 
 import input.files.ActionsInput;
-import solution.ActionFunctions;
+import solution.Commands.ChangePageCommand;
+import solution.Commands.Command;
+import solution.Factory;
 import solution.AppLogic;
 import solution.data.DataBase;
 import java.util.ArrayList;
@@ -15,8 +17,8 @@ public final class Upgrades implements Page {
         this.actionsOnPage = new ArrayList<>();
 
         this.actionsChangePage.add("movies");
+        this.actionsChangePage.add("logout");
 
-        // todo actions on page
         this.actionsOnPage.add("buy tokens");
         this.actionsOnPage.add("buy premium account");
     }
@@ -35,16 +37,9 @@ public final class Upgrades implements Page {
     @Override
     public boolean executeChangePage(final ActionsInput input, final AppLogic app,
                                      final DataBase dataBase) {
-        if (input.getPage().equals("logout")) {
-            app.setCurrentUser(null);
-            app.setCurrentPage(HomePageNeautentificat.getInstance());
-            app.getCurrentMovies().clear();
-            return true;
-        }
-
         if (this.actionsChangePage.contains(input.getPage())) {
-            app.setCurrentPage(ActionFunctions.changePage(input.getPage()));
-            return true;
+            Command command = new ChangePageCommand(input.getPage());
+            return app.getEditor().edit(command, input, app, dataBase);
         }
         return false;
     }
@@ -95,5 +90,10 @@ public final class Upgrades implements Page {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String getPageName() {
+        return "upgrades";
     }
 }

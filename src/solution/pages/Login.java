@@ -70,4 +70,9 @@ public final class Login implements Page {
             return false;
         }
     }
+
+    @Override
+    public String getPageName() {
+        return "login";
+    }
 }

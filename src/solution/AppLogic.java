@@ -1,18 +1,27 @@
 package solution;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import solution.Commands.Editor;
 import solution.pages.HomePageNeautentificat;
 import solution.pages.Page;
 import java.util.ArrayList;
+
+@JsonIgnoreProperties(value = {
+        "editor"
+})
 
 public final class AppLogic {
     private Page currentPage;
     private User currentUser;
     private ArrayList<Movie> currentMovies;
 
+    private Editor editor;
+
     public AppLogic() {
         this.currentPage = HomePageNeautentificat.getInstance();
         this.currentMovies = new ArrayList<>();
         this.currentUser = null;
+        this.editor = new Editor();
     }
 
     public AppLogic(final AppLogic a) {
@@ -47,5 +56,13 @@ public final class AppLogic {
 
     public void setCurrentMovies(final ArrayList<Movie> currentMovies) {
         this.currentMovies = currentMovies;
+    }
+
+    public Editor getEditor() {
+        return editor;
+    }
+
+    public void setEditor(Editor editor) {
+        this.editor = editor;
     }
 }

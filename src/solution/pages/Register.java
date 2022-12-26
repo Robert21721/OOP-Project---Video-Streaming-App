@@ -73,4 +73,9 @@ public final class Register implements Page {
            return true;
         }
     }
+
+    @Override
+    public String getPageName() {
+        return "register";
+    }
 }

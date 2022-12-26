@@ -2,14 +2,14 @@ package solution;
 
 import solution.pages.*;
 
-public final class ActionFunctions {
-    private ActionFunctions() { }
+public final class Factory {
+    private Factory() { }
 
     /**
      * receives as a parameter the name of a page and
      * returns an instance of the corresponding page
      */
-    public static Page changePage(final String pageName) {
+    public static Page getPage(final String pageName) {
         switch (pageName) {
             case "login":
                 return Login.getInstance();

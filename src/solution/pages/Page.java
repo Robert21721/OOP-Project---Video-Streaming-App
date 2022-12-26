@@ -22,4 +22,6 @@ public interface Page {
      * @return true in the action is allowed, false otherwise
      */
     boolean executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase);
+
+    String getPageName();
 }
