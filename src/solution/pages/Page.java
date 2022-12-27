@@ -1,5 +1,6 @@
 package solution.pages;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.AppLogic;
 import solution.data.DataBase;
@@ -12,7 +13,7 @@ public interface Page {
      * @param dataBase - database where movies and users are stored
      * @return true in the action is allowed, false otherwise
      */
-    boolean executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase);
+    void executeChangePage(ActionsInput input, AppLogic app, DataBase dataBase, ArrayNode output);
 
     /**
      * method that execute an action on the current page
@@ -21,7 +22,7 @@ public interface Page {
      * @param dataBase - database where movies and users are stored
      * @return true in the action is allowed, false otherwise
      */
-    boolean executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase);
+    void executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase, ArrayNode output);
 
     String getPageName();
 }

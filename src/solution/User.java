@@ -1,10 +1,15 @@
 package solution;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import input.files.UsersInput;
 import solution.data.Credentials;
 
 import java.util.ArrayList;
 
+@JsonIgnoreProperties(value = {
+        "subscribedGenres",
+        "ratingGivenToAllMovies",
+})
 
 public final class User {
     private Credentials credentials;
@@ -14,6 +19,9 @@ public final class User {
     private ArrayList<Movie> watchedMovies;
     private ArrayList<Movie> likedMovies;
     private ArrayList<Movie> ratedMovies;
+    private ArrayList<Notification> notifications;
+    private ArrayList<String> subscribedGenres;
+    private ArrayList<MovieRate> ratingGivenToAllMovies;
 
     public User() {
         this.credentials = new Credentials();
@@ -23,6 +31,9 @@ public final class User {
         this.watchedMovies = new ArrayList<>();
         this.likedMovies = new ArrayList<>();
         this.ratedMovies = new ArrayList<>();
+        this.notifications = new ArrayList<>();
+        this.subscribedGenres = new ArrayList<>();
+        this.ratingGivenToAllMovies = new ArrayList<>();
     }
 
     public User(final User u) {
@@ -33,6 +44,9 @@ public final class User {
         this.watchedMovies = new ArrayList<>();
         this.likedMovies = new ArrayList<>();
         this.ratedMovies = new ArrayList<>();
+        this.notifications = new ArrayList<>();
+        this.subscribedGenres = new ArrayList<>();
+        this.ratingGivenToAllMovies = new ArrayList<>();
 
         for (Movie m : u.getPurchasedMovies()) {
             this.purchasedMovies.add(new Movie(m));
@@ -49,6 +63,14 @@ public final class User {
         for (Movie m : u.getRatedMovies()) {
             this.ratedMovies.add(new Movie(m));
         }
+
+        for (Notification n : u.getNotifications()) {
+            this.notifications.add(new Notification(n));
+        }
+
+        for (String sg : u.getSubscribedGenres()) {
+            this.subscribedGenres.add(sg);
+        }
     }
     public User(final UsersInput u) {
         this.credentials = new Credentials(u.getCredentials());
@@ -58,6 +80,9 @@ public final class User {
         this.watchedMovies = new ArrayList<>();
         this.likedMovies = new ArrayList<>();
         this.ratedMovies = new ArrayList<>();
+        this.notifications = new ArrayList<>();
+        this.subscribedGenres = new ArrayList<>();
+        this.ratingGivenToAllMovies = new ArrayList<>();
     }
 
     public Credentials getCredentials() {
@@ -114,6 +139,30 @@ public final class User {
 
     public void setRatedMovies(final ArrayList<Movie> ratedMovies) {
         this.ratedMovies = ratedMovies;
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public ArrayList<String> getSubscribedGenres() {
+        return subscribedGenres;
+    }
+
+    public void setSubscribedGenres(ArrayList<String> subscribedGenres) {
+        this.subscribedGenres = subscribedGenres;
+    }
+
+    public ArrayList<MovieRate> getRatingGivenToAllMovies() {
+        return ratingGivenToAllMovies;
+    }
+
+    public void setRatingGivenToAllMovies(ArrayList<MovieRate> ratingGivenToAllMovies) {
+        this.ratingGivenToAllMovies = ratingGivenToAllMovies;
     }
 
     @Override

@@ -21,44 +21,22 @@ public class Main {
         DataBase dataBase = new DataBase(inputData);
         AppLogic appLogic = new AppLogic();
 
-        ArrayList<Movie> errorMovieList = new ArrayList<>();
-        User errorUser = null;
-
         for (ActionsInput action : inputData.getActions()) {
-
             if (action.getType().equals("change page")) {
-                if (!appLogic.getCurrentPage().executeChangePage(action, appLogic, dataBase)) {
-                    output.addObject().put("error", "Error").
-                            putPOJO("currentMoviesList", errorMovieList).
-                            putPOJO("currentUser", errorUser);
-                } else if (action.getPage().equals("movies")
-                        || action.getPage().equals("see details")) {
-
-                    AppLogic copy = new AppLogic(appLogic);
-
-                    output.addObject().putPOJO("error", null).
-                            putPOJO("currentMoviesList", copy.getCurrentMovies()).
-                            putPOJO("currentUser", copy.getCurrentUser());
-                }
-            }
-
-            if (action.getType().equals("on page")) {
-               if (appLogic.getCurrentPage().executeOnPage(action, appLogic, dataBase)) {
-                   if (!action.getFeature().equals("buy tokens")
-                           && !action.getFeature().equals("buy premium account")) {
-                       AppLogic copy = new AppLogic(appLogic);
-
-                       output.addObject().putPOJO("error", null).
-                               putPOJO("currentMoviesList", copy.getCurrentMovies()).
-                               putPOJO("currentUser", copy.getCurrentUser());
-                   }
-               } else {
-                   output.addObject().put("error", "Error").
-                           putPOJO("currentMoviesList", errorMovieList).
-                           putPOJO("currentUser", null);
-               }
+                appLogic.getCurrentPage().executeChangePage(action, appLogic, dataBase, output);
+            } else if (action.getType().equals("on page") || action.getType().equals("subscribe")) {
+                appLogic.getCurrentPage().executeOnPage(action, appLogic, dataBase, output);
+            } else if (action.getType().equals("back")) {
+                appLogic.getEditor().undo(action, appLogic, dataBase, output);
             }
         }
+
+        if (appLogic.getCurrentUser() != null) {
+            if (appLogic.getCurrentUser().getCredentials().getAccountType().equals("premium")) {
+
+            }
+        }
+
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(args[1]), output);

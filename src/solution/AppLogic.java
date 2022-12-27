@@ -14,7 +14,6 @@ public final class AppLogic {
     private Page currentPage;
     private User currentUser;
     private ArrayList<Movie> currentMovies;
-
     private Editor editor;
 
     public AppLogic() {

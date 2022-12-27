@@ -1,9 +1,11 @@
 package solution.pages;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.Commands.ChangePageCommand;
 import solution.Factory;
 import solution.AppLogic;
+import solution.Print;
 import solution.data.DataBase;
 import solution.Movie;
 import java.util.ArrayList;
@@ -36,21 +38,27 @@ public final class HomePageAutentificat implements Page {
     }
 
     @Override
-    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
-                                     final DataBase dataBase) {
+    public void executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase, final ArrayNode output) {
 
         if (this.actionsChangePage.contains(input.getPage())) {
-            ChangePageCommand command = new ChangePageCommand(input.getPage());
-            return app.getEditor().edit(command, input, app, dataBase);
+            ChangePageCommand command = new ChangePageCommand(this.getPageName());
+
+            if (app.getEditor().edit(command, input, app, dataBase, output)) {
+                return;
+            }
         }
 
-        return false;
+        Print print = new Print();
+        print.writeError(output);
     }
 
     @Override
-    public boolean executeOnPage(final ActionsInput input,
-                                 final AppLogic app, final DataBase dataBase) {
-        return false;
+    public void executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase, final ArrayNode output) {
+
+        Print print = new Print();
+        print.writeError(output);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package solution.pages;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
+import input.files.MoviesInput;
 import solution.*;
 import solution.Commands.ChangePageCommand;
 import solution.Commands.Command;
@@ -39,38 +41,51 @@ public final class SeeDetails implements Page {
     }
 
     @Override
-    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
-                                     final DataBase dataBase) {
+    public void executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase, final ArrayNode output) {
         if (this.actionsChangePage.contains(input.getPage())) {
-            Command command = new ChangePageCommand(input.getPage());
-            if (!input.getPage().equals("upgrades")) {
-                return app.getEditor().edit(command, input, app, dataBase);
-            }
+            ChangePageCommand command = new ChangePageCommand(this.getPageName());
 
-            app.setCurrentPage(Factory.getPage(input.getPage()));
-            return true;
+            if (!input.getPage().equals("upgrades")) {
+                if (app.getEditor().edit(command, input, app, dataBase, output)) {
+                    return;
+                }
+            } else {
+                app.setCurrentPage(Factory.getPage(input.getPage()));
+                return;
+            }
         }
-        return false;
+
+        Print print = new Print();
+        print.writeError(output);
     }
 
     @Override
-    public boolean executeOnPage(final ActionsInput input, final AppLogic app,
-                                 final DataBase dataBase) {
+    public void executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase, final ArrayNode output) {
+
+        if (input.getType().equals("subscribe")) {
+            subscribe(input, app, output);
+        }
+
         switch (input.getFeature()) {
             case "purchase":
-                return purchase(app);
+                purchase(app, output);
+                break;
 
             case "watch":
-                return watch(app);
+                watch(app, output);
+                break;
 
             case "like":
-                return like(app);
+                like(app, output);
+                break;
 
             case "rate":
-                return rateTheMovie(input, app);
+                rateTheMovie(input, app, output);
+                break;
 
             default:
-                return false;
         }
     }
 
@@ -79,21 +94,40 @@ public final class SeeDetails implements Page {
      * @param app - app logic
      * @return true if the movie can be purchased, false otherwise
      */
-    private boolean purchase(final AppLogic app) {
+    private void purchase(final AppLogic app, ArrayNode output) {
         User user = app.getCurrentUser();
+        Movie movie = app.getCurrentMovies().get(0);
+
+        Movie moviePurchased = app.getCurrentUser().getPurchasedMovies().
+                stream().filter(m -> m.getName().equals(movie.getName())).
+                findFirst().orElse(null);
+
+        if (moviePurchased != null) {
+            Print print = new Print(app);
+            print.writeError(output);
+            return;
+        }
+
         if (user.getCredentials().getAccountType().equals("premium") && user.getNumFreePremiumMovies() > 0) {
                 user.setNumFreePremiumMovies(user.getNumFreePremiumMovies() - 1);
                 user.getPurchasedMovies().add(app.getCurrentMovies().get(0));
-                return true;
+
+                Print print = new Print(app);
+                print.writeInfo(output);
+                return;
             }
 
         if (user.getTokensCount() >= 2) {
             user.setTokensCount(user.getTokensCount() - 2);
             user.getPurchasedMovies().add(app.getCurrentMovies().get(0));
-            return true;
+
+            Print print = new Print(app);
+            print.writeInfo(output);
+            return;
         }
 
-        return false;
+        Print print = new Print();
+        print.writeError(output);
     }
 
     /**
@@ -101,14 +135,28 @@ public final class SeeDetails implements Page {
      * @param app - app logic
      * @return true if the movie can be watched, false otherwise
      */
-    private boolean watch(final AppLogic app) {
+    private void watch(final AppLogic app, ArrayNode output) {
         Movie movie = app.getCurrentMovies().get(0);
+
+        Movie movieWatched = app.getCurrentUser().getWatchedMovies().
+                stream().filter(m -> m.getName().equals(movie.getName())).
+                findFirst().orElse(null);
+
+        // if the movie was already seen, do nothing
+        if (movieWatched != null) {
+            return;
+        }
 
         if (app.getCurrentUser().getPurchasedMovies().contains(movie)) {
             app.getCurrentUser().getWatchedMovies().add(movie);
-            return true;
+
+            Print print = new Print(app);
+            print.writeInfo(output);
+            return;
         }
-        return false;
+
+        Print print = new Print();
+        print.writeError(output);
     }
 
     /**
@@ -116,15 +164,30 @@ public final class SeeDetails implements Page {
      * @param app - app logic
      * @return true if the movie can be liked, false otherwise
      */
-    private boolean like(final AppLogic app) {
+    private void like(final AppLogic app, ArrayNode output) {
         Movie movie = app.getCurrentMovies().get(0);
+
+        Movie movieLiked = app.getCurrentUser().getLikedMovies().
+                stream().filter(m -> m.getName().equals(movie.getName())).
+                findFirst().orElse(null);
+
+        if (movieLiked != null) {
+            Print print = new Print(app);
+            print.writeError(output);
+            return;
+        }
 
         if (app.getCurrentUser().getWatchedMovies().contains(movie)) {
             movie.setNumLikes(movie.getNumLikes() + 1);
             app.getCurrentUser().getLikedMovies().add(movie);
-            return true;
+
+            Print print = new Print(app);
+            print.writeInfo(output);
+            return;
         }
-        return false;
+
+        Print print = new Print();
+        print.writeError(output);
     }
 
     /**
@@ -133,23 +196,71 @@ public final class SeeDetails implements Page {
      * @param app - the app logic
      * @return true if the movie can be rated, false otherwise
      */
-    private boolean rateTheMovie(final ActionsInput input, final AppLogic app) {
+    private void rateTheMovie(final ActionsInput input, final AppLogic app, ArrayNode output) {
         Movie movie = app.getCurrentMovies().get(0);
+        User user = app.getCurrentUser();
 
         if (input.getRate() > 5) {
-            return false;
+            Print print = new Print(app);
+            print.writeError(output);
+            return;
+        }
+
+        Movie movieRated = user.getRatedMovies().
+                        stream().filter(m -> m.getName().equals(movie.getName())).
+                        findFirst().orElse(null);
+
+        if (movieRated != null) {
+            // if the user already gave a rating to the movie, find that rate
+            MovieRate movieRate = user.getRatingGivenToAllMovies().
+                        stream().filter(r -> r.getMovie().getName().equals(movieRated.getName())).
+                        findFirst().orElse(null);
+
+            // remove it form the list and add the new rating
+            int oldRating = movieRate.getRate();
+            movie.getRatings().remove(Integer.valueOf(oldRating));
+            movie.getRatings().add(input.getRate());
+
+            // recalculate the movie rating
+            int rating = movie.getRatings().stream().reduce(0, Integer::sum);
+            movie.setRating((double) (rating) / movie.getNumRatings());
+
+            Print print = new Print(app);
+            print.writeInfo(output);
+            return;
         }
 
         if (app.getCurrentUser().getWatchedMovies().contains(movie)) {
             movie.setNumRatings(movie.getNumRatings() + 1);
             movie.getRatings().add(input.getRate());
+
+            // add the movie and its rating in the user MovieRate list
+            MovieRate movieRate = new MovieRate(movie, input.getRate());
+            user.getRatingGivenToAllMovies().add(movieRate);
+
+            // calculate the movie rating
             int rating = movie.getRatings().stream().reduce(0, Integer::sum);
-            movie.setRating((double) (rating / movie.getNumRatings()));
+            movie.setRating((double) (rating) / movie.getNumRatings());
             app.getCurrentUser().getRatedMovies().add(movie);
 
-            return true;
+            Print print = new Print(app);
+            print.writeInfo(output);
+            return;
         }
-        return false;
+
+        Print print = new Print();
+        print.writeError(output);
+    }
+
+    private void subscribe(final ActionsInput input, final AppLogic app, final ArrayNode output) {
+        Movie movie = app.getCurrentMovies().get(0);
+
+        if (movie != null && movie.getGenres().contains(input.getSubscribedGenre())) {
+            app.getCurrentUser().getSubscribedGenres().add(input.getSubscribedGenre());
+        } else {
+            Print print = new Print();
+            print.writeError(output);
+        }
     }
 
     @Override

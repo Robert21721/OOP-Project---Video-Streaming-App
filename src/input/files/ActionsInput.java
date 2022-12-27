@@ -1,5 +1,7 @@
 package input.files;
 
+import solution.Print;
+
 public final class ActionsInput {
     private String type;
     private String page;
@@ -10,6 +12,9 @@ public final class ActionsInput {
     private FiltersInput filters;
     private int count;
     private int rate;
+    private String subscribedGenre;
+    private MoviesInput addedMovie;
+    private String deletedMovie;
 
     public ActionsInput() { }
 
@@ -83,6 +88,30 @@ public final class ActionsInput {
 
     public void setRate(final int rate) {
         this.rate = rate;
+    }
+
+    public String getSubscribedGenre() {
+        return subscribedGenre;
+    }
+
+    public void setSubscribedGenre(String subscribedGenre) {
+        this.subscribedGenre = subscribedGenre;
+    }
+
+    public MoviesInput getAddedMovie() {
+        return addedMovie;
+    }
+
+    public void setAddedMovie(MoviesInput addedMovie) {
+        this.addedMovie = addedMovie;
+    }
+
+    public String getDeletedMovie() {
+        return deletedMovie;
+    }
+
+    public void setDeletedMovie(String deletedMovie) {
+        this.deletedMovie = deletedMovie;
     }
 }
 

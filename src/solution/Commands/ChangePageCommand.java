@@ -1,9 +1,11 @@
 package solution.Commands;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.Factory;
 import solution.AppLogic;
 import solution.Movie;
+import solution.Print;
 import solution.data.DataBase;
 import solution.pages.HomePageNeautentificat;
 
@@ -18,30 +20,42 @@ public final class ChangePageCommand implements Command {
 
     public ChangePageCommand(final String newPageName) {
         this.newPageName = newPageName;
+        this.newMovieName = null;
     }
 
     @Override
-    public boolean execute(final ActionsInput input, final AppLogic app, final DataBase dataBase) {
-        this.oldPageName = this.getNewPageName();
-        this.newPageName = input.getPage();
-        this.oldMovieName = this.getNewMovieName();
-        this.newMovieName = input.getMovie();
+    public boolean execute(final ActionsInput input, final AppLogic app, final DataBase dataBase, ArrayNode output) {
 
-        return change(input.getMovie(), input.getPage(), app, dataBase);
+        if (change(input.getMovie(), input.getPage(), app, dataBase, output)) {
+            this.oldPageName = this.newPageName;
+            this.oldMovieName = this.newMovieName;
+            this.newPageName = app.getCurrentPage().getPageName();
+
+            if (!app.getCurrentMovies().isEmpty()) {
+                this.newMovieName = app.getCurrentMovies().get(0).getName();
+            }
+            return true;
+        }
+
+        return false;
     }
 
     @Override
-    public void undo(final ActionsInput input, final AppLogic app, final DataBase dataBase) {
-        this.newPageName = this.getOldPageName();
+    public void undo(final ActionsInput input, final AppLogic app, final DataBase dataBase, ArrayNode output) {
+        this.newPageName = this.oldPageName;
         this.oldPageName = app.getCurrentPage().getPageName();
-        this.newMovieName = this.getOldMovieName();
-        this.oldMovieName = app.getCurrentMovies().get(0).getName();
+        this.newMovieName = this.oldMovieName;
 
-        change(this.newMovieName, this.newPageName, app, dataBase);
+        if (!app.getCurrentMovies().isEmpty()) {
+            this.oldMovieName = app.getCurrentMovies().get(0).getName();
+        }
+
+        change(this.newMovieName, this.newPageName, app, dataBase, output);
     }
 
+    // pageName e null for whatever the fuck reason
     private boolean change(final String movieName, final String pageName,
-                           final AppLogic app, final DataBase dataBase) {
+                           final AppLogic app, final DataBase dataBase, ArrayNode output) {
         switch (pageName) {
             case "login":
             case "register":
@@ -55,8 +69,21 @@ public final class ChangePageCommand implements Command {
                 return true;
 
             case "movies":
-            case "upgrades":
                 ArrayList<Movie> userMovies = dataBase.getMovies().
+                        stream().
+                        filter(movie -> !movie.getCountriesBanned()
+                                .contains(app.getCurrentUser().getCredentials().getCountry())).
+                        collect(Collectors.toCollection(ArrayList::new));
+
+                app.setCurrentMovies(userMovies);
+                app.setCurrentPage(Factory.getPage(pageName));
+
+                Print print = new Print(app);
+                print.writeInfo(output);
+                return true;
+
+            case "upgrades":
+                userMovies = dataBase.getMovies().
                         stream().
                         filter(movie -> !movie.getCountriesBanned()
                                 .contains(app.getCurrentUser().getCredentials().getCountry())).
@@ -80,6 +107,9 @@ public final class ChangePageCommand implements Command {
                 app.getCurrentMovies().clear();
                 app.getCurrentMovies().add(movie);
                 app.setCurrentPage(Factory.getPage(pageName));
+
+                Print print1 = new Print(app);
+                print1.writeInfo(output);
                 return true;
 
             default:

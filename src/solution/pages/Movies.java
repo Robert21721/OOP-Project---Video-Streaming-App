@@ -1,10 +1,12 @@
 package solution.pages;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.Commands.ChangePageCommand;
 import solution.Commands.Command;
 import solution.Factory;
 import solution.AppLogic;
+import solution.Print;
 import solution.data.DataBase;
 import solution.Movie;
 import solution.comparators.ComparatorDecrDecr;
@@ -44,18 +46,24 @@ public final class Movies implements Page {
     }
 
     @Override
-    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
-                                     final DataBase dataBase) {
+    public void executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase, final ArrayNode output) {
+
         if (this.actionsChangePage.contains(input.getPage())) {
-            Command command = new ChangePageCommand(input.getPage());
-            return app.getEditor().edit(command, input, app, dataBase);
+            ChangePageCommand command = new ChangePageCommand(this.getPageName());
+
+            if (app.getEditor().edit(command, input, app, dataBase, output)) {
+                return;
+            }
         }
-        return false;
+
+        Print print = new Print();
+        print.writeError(output);
     }
 
     @Override
-    public boolean executeOnPage(final ActionsInput input, final AppLogic app,
-                                 final DataBase dataBase) {
+    public void executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase, final ArrayNode output) {
         if (this.actionsOnPage.contains(input.getFeature())) {
             switch (input.getFeature()) {
                 case "search":
@@ -67,11 +75,16 @@ public final class Movies implements Page {
                     break;
 
                 default:
+                    return;
             }
 
-            return true;
+            Print print = new Print(app);
+            print.writeInfo(output);
+            return;
         }
-        return false;
+
+        Print print = new Print();
+        print.writeError(output);
     }
 
     /**

@@ -1,7 +1,9 @@
 package solution.pages;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.AppLogic;
+import solution.Print;
 import solution.data.DataBase;
 import solution.User;
 import java.util.ArrayList;
@@ -29,18 +31,27 @@ public final class Login implements Page {
     }
 
     @Override
-    public boolean executeChangePage(final ActionsInput input, final AppLogic app,
-                                     final DataBase dataBase) {
-        return false;
+    public void executeChangePage(final ActionsInput input, final AppLogic app,
+                                     final DataBase dataBase, final ArrayNode output) {
+
+        Print print = new Print(app);
+        print.writeError(output);
     }
 
     @Override
-    public boolean executeOnPage(final ActionsInput input, final AppLogic app,
-                                 final DataBase dataBase) {
+    public void executeOnPage(final ActionsInput input, final AppLogic app,
+                                 final DataBase dataBase, final ArrayNode output) {
+
         if (this.actionsOnPage.contains(input.getFeature())) {
-            return userLogin(input, app, dataBase);
+            if(userLogin(input, app, dataBase)) {
+                Print print = new Print(app);
+                print.writeInfo(output);
+                return;
+            }
         }
-        return false;
+
+        Print print = new Print();
+        print.writeError(output);
     }
 
     /**
