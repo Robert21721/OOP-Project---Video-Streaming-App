@@ -66,6 +66,7 @@ public final class SeeDetails implements Page {
 
         if (input.getType().equals("subscribe")) {
             subscribe(input, app, output);
+            return;
         }
 
         switch (input.getFeature()) {
@@ -255,7 +256,9 @@ public final class SeeDetails implements Page {
     private void subscribe(final ActionsInput input, final AppLogic app, final ArrayNode output) {
         Movie movie = app.getCurrentMovies().get(0);
 
-        if (movie != null && movie.getGenres().contains(input.getSubscribedGenre())) {
+        if (movie != null && movie.getGenres().contains(input.getSubscribedGenre()) &&
+                    !app.getCurrentUser().getSubscribedGenres().contains(input.getSubscribedGenre())) {
+
             app.getCurrentUser().getSubscribedGenres().add(input.getSubscribedGenre());
         } else {
             Print print = new Print();

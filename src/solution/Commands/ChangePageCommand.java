@@ -34,6 +34,7 @@ public final class ChangePageCommand implements Command {
             if (!app.getCurrentMovies().isEmpty()) {
                 this.newMovieName = app.getCurrentMovies().get(0).getName();
             }
+
             return true;
         }
 
@@ -53,12 +54,13 @@ public final class ChangePageCommand implements Command {
         change(this.newMovieName, this.newPageName, app, dataBase, output);
     }
 
-    // pageName e null for whatever the fuck reason
     private boolean change(final String movieName, final String pageName,
                            final AppLogic app, final DataBase dataBase, ArrayNode output) {
         switch (pageName) {
             case "login":
             case "register":
+            case "homePage A":
+            case "homePage N":
                 app.setCurrentPage(Factory.getPage(pageName));
                 return true;
 
@@ -66,6 +68,7 @@ public final class ChangePageCommand implements Command {
                 app.setCurrentUser(null);
                 app.setCurrentPage(HomePageNeautentificat.getInstance());
                 app.getCurrentMovies().clear();
+                app.getEditor().getHistory().clear();
                 return true;
 
             case "movies":

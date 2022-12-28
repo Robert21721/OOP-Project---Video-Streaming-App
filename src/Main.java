@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import solution.*;
 import solution.Commands.Editor;
+import solution.PremiumUserNotification.PremiumUserRecommendation;
 import solution.data.DataBase;
 
 import java.io.File;
@@ -33,7 +34,8 @@ public class Main {
 
         if (appLogic.getCurrentUser() != null) {
             if (appLogic.getCurrentUser().getCredentials().getAccountType().equals("premium")) {
-
+                PremiumUserRecommendation recommendation = new PremiumUserRecommendation(dataBase);
+                recommendation.giveRecommendation(appLogic, output);
             }
         }
 

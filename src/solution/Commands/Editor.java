@@ -14,8 +14,12 @@ public final class Editor {
 
     public boolean edit(final Command command, final ActionsInput input,
                         final AppLogic app, final DataBase dataBase, ArrayNode output) {
-        history.push(command);
-        return command.execute(input, app, dataBase, output);
+
+        if (command.execute(input, app, dataBase, output)) {
+            this.history.push(command);
+            return true;
+        }
+        return false;
     }
 
     public void undo(final ActionsInput input, final AppLogic app, final DataBase dataBase, ArrayNode output) {
@@ -39,5 +43,13 @@ public final class Editor {
         if (command != null) {
             command.undo(input, app, dataBase, output);
         }
+    }
+
+    public LinkedList<Command> getHistory() {
+        return history;
+    }
+
+    public void setHistory(LinkedList<Command> history) {
+        this.history = history;
     }
 }

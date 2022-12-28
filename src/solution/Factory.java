@@ -26,6 +26,12 @@ public final class Factory {
             case "see details":
                 return SeeDetails.getInstance();
 
+            case "homePage A":
+                return HomePageAutentificat.getInstance();
+
+            case "homePage N":
+                return HomePageNeautentificat.getInstance();
+
             default:
                 return null;
         }

@@ -18,6 +18,13 @@ public final class Print {
                 putPOJO("currentUser", this.app.getCurrentUser());
     }
 
+    public void writeInfoForNotification(ArrayNode output) {
+        output.addObject().putPOJO("error", null).
+                putPOJO("currentMoviesList", null).
+                putPOJO("currentUser", this.app.getCurrentUser());
+
+    }
+
     public void writeError(ArrayNode output) {
         ArrayList<Movie> errorMovieList = new ArrayList<>();
         User errorUser = null;
