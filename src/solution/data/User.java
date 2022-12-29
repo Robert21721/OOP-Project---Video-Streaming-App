@@ -1,8 +1,10 @@
-package solution;
+package solution.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import input.files.UsersInput;
-import solution.data.Credentials;
+import solution.Movie;
+import solution.MovieRate;
+import solution.Notification;
 
 import java.util.ArrayList;
 
@@ -11,7 +13,7 @@ import java.util.ArrayList;
         "ratingGivenToAllMovies",
 })
 
-public final class User {
+public final class User implements Observer{
     private Credentials credentials;
     private int tokensCount;
     private int numFreePremiumMovies;
@@ -83,6 +85,43 @@ public final class User {
         this.notifications = new ArrayList<>();
         this.subscribedGenres = new ArrayList<>();
         this.ratingGivenToAllMovies = new ArrayList<>();
+    }
+
+    @Override
+    public void update(Object o, Movie addedMovie) {
+        Notification notification = (Notification) o;
+
+        if (notification.getMessage().equals("ADD")) {
+            if (addedMovie.getCountriesBanned().contains(this.credentials.getCountry())) {
+                return;
+            }
+
+            for (String genre : this.subscribedGenres) {
+                if (addedMovie.getGenres().contains(genre)) {
+                    this.notifications.add(notification);
+                    return;
+                }
+            }
+        }
+
+        if (notification.getMessage().equals("DELETE")) {
+            Movie movieToBeDeleted = this.purchasedMovies.stream().
+                    filter(movie -> movie.getName().equals(notification.getMovieName())).
+                    findFirst().orElse(null);
+
+            if (movieToBeDeleted != null) {
+                this.purchasedMovies.remove(movieToBeDeleted);
+                this.watchedMovies.remove(movieToBeDeleted);
+                this.likedMovies.remove(movieToBeDeleted);
+                this.ratedMovies.remove(movieToBeDeleted);
+
+                if (this.getCredentials().getAccountType().equals("premium")) {
+                    this.numFreePremiumMovies++;
+                } else {
+                    this.tokensCount += 2;
+                }
+            }
+        }
     }
 
     public Credentials getCredentials() {

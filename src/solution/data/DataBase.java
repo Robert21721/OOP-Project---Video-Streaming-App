@@ -1,16 +1,19 @@
 package solution.data;
 
-import input.files.ActionsInput;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.Input;
 import input.files.MoviesInput;
 import input.files.UsersInput;
 import solution.Movie;
-import solution.User;
+import solution.Notification;
+import solution.Print;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public final class DataBase {
-    private ArrayList<User> users;
+    private Notification notification;
+    private ArrayList<Observer> users;
     private ArrayList<Movie> movies;
 
     public DataBase(final Input input) {
@@ -32,11 +35,59 @@ public final class DataBase {
 
     }
 
-    public ArrayList<User> getUsers() {
+    public void addUser(Observer user) {
+        this.users.add(user);
+    }
+
+    public void removeUser(Observer user) {
+        this.users.remove(user);
+    }
+
+    public void setNotification(Notification notification, Movie addedMovie, ArrayNode output) {
+        this.notification = notification;
+
+        if (notification.getMessage().equals("ADD")) {
+            Movie existingMovie = this.movies.stream().
+                    filter(movie -> movie.getName().equals(addedMovie.getName())).
+                    findFirst().orElse(null);
+
+            if (existingMovie == null) {
+                this.movies.add(addedMovie);
+            } else {
+                Print print = new Print();
+                print.writeError(output);
+                return;
+            }
+        }
+
+        if (notification.getMessage().equals("DELETE")){
+
+            String movieName = notification.getMovieName();
+            Movie movieToBeDeleted = this.movies.stream().
+                    filter(movie -> movie.getName().equals(movieName)).
+                    findFirst().orElse(null);
+
+            if (movieToBeDeleted != null) {
+                this.movies.remove(movieToBeDeleted);
+            } else {
+                Print print = new Print();
+                print.writeError(output);
+                return;
+            }
+        }
+
+        for (Observer o : this.users) {
+            o.update(this.notification, addedMovie);
+        }
+    }
+
+
+
+    public ArrayList<Observer> getUsers() {
         return users;
     }
 
-    public void setUsers(final ArrayList<User> users) {
+    public void setUsers(ArrayList<Observer> users) {
         this.users = users;
     }
 

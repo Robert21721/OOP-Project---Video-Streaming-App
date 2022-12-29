@@ -2,14 +2,12 @@ package solution.pages;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
-import input.files.MoviesInput;
 import solution.*;
 import solution.Commands.ChangePageCommand;
-import solution.Commands.Command;
 import solution.data.DataBase;
+import solution.data.User;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public final class SeeDetails implements Page {
     private static SeeDetails singletonInstance = null;
@@ -96,10 +94,10 @@ public final class SeeDetails implements Page {
      * @return true if the movie can be purchased, false otherwise
      */
     private void purchase(final AppLogic app, ArrayNode output) {
-        User user = app.getCurrentUser();
+        User user = (User)app.getCurrentUser();
         Movie movie = app.getCurrentMovies().get(0);
 
-        Movie moviePurchased = app.getCurrentUser().getPurchasedMovies().
+        Movie moviePurchased = user.getPurchasedMovies().
                 stream().filter(m -> m.getName().equals(movie.getName())).
                 findFirst().orElse(null);
 

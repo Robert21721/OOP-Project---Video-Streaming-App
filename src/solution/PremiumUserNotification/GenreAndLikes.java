@@ -6,6 +6,13 @@ public class GenreAndLikes {
 
     public GenreAndLikes() { }
 
+    @Override
+    public String toString() {
+        return "{ genre: " + genre +
+                ", nrOfLikes: " + nrOfLikes +
+                " }";
+    }
+
     public String getGenre() {
         return genre;
     }

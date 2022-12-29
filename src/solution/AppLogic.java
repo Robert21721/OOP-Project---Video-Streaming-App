@@ -2,6 +2,7 @@ package solution;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import solution.Commands.Editor;
+import solution.data.User;
 import solution.pages.HomePageNeautentificat;
 import solution.pages.Page;
 import java.util.ArrayList;

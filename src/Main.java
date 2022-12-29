@@ -23,12 +23,31 @@ public class Main {
         AppLogic appLogic = new AppLogic();
 
         for (ActionsInput action : inputData.getActions()) {
-            if (action.getType().equals("change page")) {
-                appLogic.getCurrentPage().executeChangePage(action, appLogic, dataBase, output);
-            } else if (action.getType().equals("on page") || action.getType().equals("subscribe")) {
-                appLogic.getCurrentPage().executeOnPage(action, appLogic, dataBase, output);
-            } else if (action.getType().equals("back")) {
-                appLogic.getEditor().undo(action, appLogic, dataBase, output);
+            switch (action.getType()) {
+                case "change page":
+                    appLogic.getCurrentPage().executeChangePage(action, appLogic, dataBase, output);
+                    break;
+
+                case "on page":
+                case "subscribe":
+                    appLogic.getCurrentPage().executeOnPage(action, appLogic, dataBase, output);
+                    break;
+
+                case "back":
+                    appLogic.getEditor().undo(action, appLogic, dataBase, output);
+                    break;
+
+                case "database":
+                    Notification notification = null;
+
+                    if (action.getFeature().equals("add")) {
+                        notification = new Notification(action.getAddedMovie().getName(), "ADD");
+                        dataBase.setNotification(notification, new Movie(action.getAddedMovie()), output);
+                    } else {
+                        notification = new Notification(action.getDeletedMovie(), "DELETE");
+                        dataBase.setNotification(notification, null, output);
+                    }
+                    break;
             }
         }
 

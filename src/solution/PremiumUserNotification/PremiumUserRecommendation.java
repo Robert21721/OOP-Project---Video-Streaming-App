@@ -3,6 +3,7 @@ package solution.PremiumUserNotification;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import solution.*;
 import solution.data.DataBase;
+import solution.data.User;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +24,7 @@ public class PremiumUserRecommendation {
 
     public void giveRecommendation(AppLogic app, ArrayNode output) {
         User user = app.getCurrentUser();
+        // System.out.println("user liked movies " + user.getLikedMovies());
 
         for (Movie movie : user.getLikedMovies()) {
             for (String genre : movie.getGenres()) {
@@ -40,10 +42,9 @@ public class PremiumUserRecommendation {
             }
         }
 
-        // avem lista cu genuri si like uri
         Collections.sort(this.genreAndLikes, new CompareGenreByNrOfLikes());
+        // System.out.println("genuri si like uri sortate " + this.genreAndLikes);
 
-        // avem lista cu filmele posibile
         this.movies = this.dataBase.getMovies().
                 stream().
                 filter(movie -> !movie.getCountriesBanned()
@@ -52,13 +53,13 @@ public class PremiumUserRecommendation {
                 collect(Collectors.toCollection(ArrayList::new));
 
         Collections.sort(this.movies, new CompareMoviesByNrOfLikes());
+        // System.out.println("filme in ordine descrescatoare dupa like uri " + this.movies);
 
         for (GenreAndLikes g : this.genreAndLikes) {
             for (Movie m : this.movies) {
                 String genre = g.getGenre();
 
                 if (m.getGenres().contains(genre)) {
-                    // print whatever
                     Notification notification = new Notification(m.getName(), "Recommendation");
                     app.getCurrentUser().getNotifications().add(notification);
                     Print print = new Print(app);
@@ -68,7 +69,6 @@ public class PremiumUserRecommendation {
             }
         }
 
-        // print error
         Notification notification = new Notification("No recommendation", "Recommendation");
         app.getCurrentUser().getNotifications().add(notification);
         Print print = new Print(app);

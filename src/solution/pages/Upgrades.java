@@ -95,7 +95,7 @@ public final class Upgrades implements Page {
         int nrTokens = input.getCount();
 
         if (balance >= nrTokens) {
-            app.getCurrentUser().setTokensCount(nrTokens);
+            app.getCurrentUser().setTokensCount(app.getCurrentUser().getTokensCount() + nrTokens);
             app.getCurrentUser().getCredentials().setBalance(String.valueOf(balance - nrTokens));
             return;
         }

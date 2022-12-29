@@ -1,6 +1,7 @@
 package solution;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import solution.data.User;
 
 import java.util.ArrayList;
 

@@ -5,7 +5,8 @@ import input.files.ActionsInput;
 import solution.AppLogic;
 import solution.Print;
 import solution.data.DataBase;
-import solution.User;
+import solution.data.Observer;
+import solution.data.User;
 import java.util.ArrayList;
 
 public final class Login implements Page {
@@ -63,10 +64,10 @@ public final class Login implements Page {
      */
     private boolean userLogin(final ActionsInput input, final AppLogic app,
                               final DataBase dataBase) {
-        User user = dataBase.getUsers().
+        User user = (User) dataBase.getUsers().
                 stream().
-                filter(u -> (u.getCredentials().getName().equals(input.getCredentials().getName())
-                        && u.getCredentials().getPassword().equals(input.getCredentials()
+                filter((u -> ((User) u).getCredentials().getName().equals(input.getCredentials().getName())
+                        && ((User) u).getCredentials().getPassword().equals(input.getCredentials()
                         .getPassword()))).
                 findFirst().
                 orElse(null);

@@ -6,7 +6,8 @@ import solution.AppLogic;
 import solution.Print;
 import solution.data.Credentials;
 import solution.data.DataBase;
-import solution.User;
+import solution.data.Observer;
+import solution.data.User;
 
 import java.util.ArrayList;
 
@@ -65,9 +66,9 @@ public final class Register implements Page {
      */
     private boolean userRegister(final ActionsInput input, final AppLogic app,
                                  final DataBase dataBase) {
-        User existentUser = dataBase.getUsers().
+        User existentUser = (User) dataBase.getUsers().
                 stream().
-                filter(u -> u.getCredentials().getName().equals(input.getCredentials().getName())).
+                filter(u -> ((User) u).getCredentials().getName().equals(input.getCredentials().getName())).
                 findFirst().
                 orElse(null);
 
@@ -78,7 +79,8 @@ public final class Register implements Page {
             Credentials newUserCredentials = new Credentials(input.getCredentials());
             newUser.setCredentials(newUserCredentials);
 
-            dataBase.getUsers().add(newUser);
+            dataBase.addUser(newUser);
+            // dataBase.getUsers().add(newUser);
             app.setCurrentPage(HomePageAutentificat.getInstance());
             app.setCurrentUser(newUser);
            return true;
