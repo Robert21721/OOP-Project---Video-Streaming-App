@@ -4,15 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import solution.*;
-import solution.Commands.Editor;
-import solution.PremiumUserNotification.PremiumUserRecommendation;
-import solution.data.DataBase;
+import solution.premiumUserNotification.PremiumUserRecommendation;
+import solution.observer.DataBase;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Main {
+    /**
+     * read input file, create database and app, execute the given actions
+     * and write in the output file
+     * @param args - input and output files
+     * @throws IOException
+     */
     public static void main(final String[] args) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Input inputData = objectMapper.readValue(new File(args[0]), Input.class);
@@ -48,6 +52,8 @@ public class Main {
                         dataBase.setNotification(notification, null, output);
                     }
                     break;
+
+                default:
             }
         }
 

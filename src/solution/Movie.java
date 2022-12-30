@@ -81,7 +81,7 @@ public final class Movie {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(final String year) {
         this.year = year;
     }
 

@@ -1,4 +1,4 @@
-package solution.Commands;
+package solution.command;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
@@ -6,7 +6,7 @@ import solution.Factory;
 import solution.AppLogic;
 import solution.Movie;
 import solution.Print;
-import solution.data.DataBase;
+import solution.observer.DataBase;
 import solution.pages.HomePageNeautentificat;
 
 import java.util.ArrayList;
@@ -24,7 +24,8 @@ public final class ChangePageCommand implements Command {
     }
 
     @Override
-    public boolean execute(final ActionsInput input, final AppLogic app, final DataBase dataBase, ArrayNode output) {
+    public boolean execute(final ActionsInput input, final AppLogic app,
+                           final DataBase dataBase, final ArrayNode output) {
 
         if (change(input.getMovie(), input.getPage(), app, dataBase, output)) {
             this.oldPageName = this.newPageName;
@@ -42,7 +43,8 @@ public final class ChangePageCommand implements Command {
     }
 
     @Override
-    public void undo(final ActionsInput input, final AppLogic app, final DataBase dataBase, ArrayNode output) {
+    public void undo(final ActionsInput input, final AppLogic app,
+                     final DataBase dataBase, final ArrayNode output) {
         this.newPageName = this.oldPageName;
         this.oldPageName = app.getCurrentPage().getPageName();
         this.newMovieName = this.oldMovieName;

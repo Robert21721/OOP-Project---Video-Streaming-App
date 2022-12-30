@@ -2,14 +2,12 @@ package solution.pages;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
-import solution.Commands.ChangePageCommand;
-import solution.Factory;
+import solution.command.ChangePageCommand;
 import solution.AppLogic;
 import solution.Print;
-import solution.data.DataBase;
-import solution.Movie;
+import solution.observer.DataBase;
+
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public final class HomePageAutentificat implements Page {
     private static HomePageAutentificat singletonInstance = null;

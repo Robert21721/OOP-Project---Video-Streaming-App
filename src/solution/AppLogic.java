@@ -1,8 +1,8 @@
 package solution;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import solution.Commands.Editor;
-import solution.data.User;
+import solution.command.Editor;
+import solution.observer.User;
 import solution.pages.HomePageNeautentificat;
 import solution.pages.Page;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public final class AppLogic {
         return editor;
     }
 
-    public void setEditor(Editor editor) {
+    public void setEditor(final Editor editor) {
         this.editor = editor;
     }
 }

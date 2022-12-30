@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.AppLogic;
 import solution.Print;
-import solution.data.DataBase;
-import solution.data.Observer;
-import solution.data.User;
+import solution.observer.DataBase;
+import solution.observer.User;
 import java.util.ArrayList;
 
 public final class Login implements Page {
@@ -44,7 +43,7 @@ public final class Login implements Page {
                                  final DataBase dataBase, final ArrayNode output) {
 
         if (this.actionsOnPage.contains(input.getFeature())) {
-            if(userLogin(input, app, dataBase)) {
+            if (userLogin(input, app, dataBase)) {
                 Print print = new Print(app);
                 print.writeInfo(output);
                 return;

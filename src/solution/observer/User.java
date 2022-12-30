@@ -1,7 +1,8 @@
-package solution.data;
+package solution.observer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import input.files.UsersInput;
+import solution.Credentials;
 import solution.Movie;
 import solution.MovieRate;
 import solution.Notification;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
         "ratingGivenToAllMovies",
 })
 
-public final class User implements Observer{
+public final class User implements Observer {
     private Credentials credentials;
     private int tokensCount;
     private int numFreePremiumMovies;
@@ -88,7 +89,7 @@ public final class User implements Observer{
     }
 
     @Override
-    public void update(Object o, Movie addedMovie) {
+    public void update(final Object o, final Movie addedMovie) {
         Notification notification = (Notification) o;
 
         if (notification.getMessage().equals("ADD")) {
@@ -184,7 +185,7 @@ public final class User implements Observer{
         return notifications;
     }
 
-    public void setNotifications(ArrayList<Notification> notifications) {
+    public void setNotifications(final ArrayList<Notification> notifications) {
         this.notifications = notifications;
     }
 
@@ -192,7 +193,7 @@ public final class User implements Observer{
         return subscribedGenres;
     }
 
-    public void setSubscribedGenres(ArrayList<String> subscribedGenres) {
+    public void setSubscribedGenres(final ArrayList<String> subscribedGenres) {
         this.subscribedGenres = subscribedGenres;
     }
 
@@ -200,7 +201,7 @@ public final class User implements Observer{
         return ratingGivenToAllMovies;
     }
 
-    public void setRatingGivenToAllMovies(ArrayList<MovieRate> ratingGivenToAllMovies) {
+    public void setRatingGivenToAllMovies(final ArrayList<MovieRate> ratingGivenToAllMovies) {
         this.ratingGivenToAllMovies = ratingGivenToAllMovies;
     }
 

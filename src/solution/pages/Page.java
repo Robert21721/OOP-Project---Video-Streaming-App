@@ -3,7 +3,7 @@ package solution.pages;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.AppLogic;
-import solution.data.DataBase;
+import solution.observer.DataBase;
 
 public interface Page {
     /**
@@ -24,5 +24,9 @@ public interface Page {
      */
     void executeOnPage(ActionsInput input, AppLogic app, DataBase dataBase, ArrayNode output);
 
+    /**
+     *
+     * @return page's name
+     */
     String getPageName();
 }

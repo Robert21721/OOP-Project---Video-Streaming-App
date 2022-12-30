@@ -2,11 +2,10 @@ package solution.pages;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
-import solution.Commands.ChangePageCommand;
-import solution.Factory;
+import solution.command.ChangePageCommand;
 import solution.AppLogic;
 import solution.Print;
-import solution.data.DataBase;
+import solution.observer.DataBase;
 
 import java.util.ArrayList;
 

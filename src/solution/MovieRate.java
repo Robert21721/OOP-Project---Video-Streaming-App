@@ -1,10 +1,9 @@
 package solution;
 
-public class MovieRate {
+public final class MovieRate {
     private Movie movie;
     private int rate;
-    
-    public MovieRate(Movie movie, int rate) {
+    public MovieRate(final Movie movie, final int rate) {
         this.movie = movie;
         this.rate = rate;
     }
@@ -13,7 +12,7 @@ public class MovieRate {
         return movie;
     }
 
-    public void setMovie(Movie movie) {
+    public void setMovie(final Movie movie) {
         this.movie = movie;
     }
 
@@ -21,7 +20,7 @@ public class MovieRate {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(final int rate) {
         this.rate = rate;
     }
 }

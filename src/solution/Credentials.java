@@ -1,4 +1,4 @@
-package solution.data;
+package solution;
 
 import input.files.CredentialsInput;
 

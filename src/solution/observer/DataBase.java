@@ -1,4 +1,4 @@
-package solution.data;
+package solution.observer;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.Input;
@@ -9,7 +9,6 @@ import solution.Notification;
 import solution.Print;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public final class DataBase {
     private Notification notification;
@@ -35,22 +34,39 @@ public final class DataBase {
 
     }
 
-    public void addUser(Observer user) {
+    /**
+     * add user to database
+     * @param user
+     */
+    public void addUser(final Observer user) {
         this.users.add(user);
     }
 
-    public void removeUser(Observer user) {
+    /**
+     * remove user from database
+     * @param user
+     */
+    public void removeUser(final Observer user) {
         this.users.remove(user);
     }
 
-    public void setNotification(Notification notification, Movie addedMovie, ArrayNode output) {
+    /**
+     * set notification, update database and notify observers
+     * @param notification - notification for users
+     * @param addedMovie - movie to be added to database
+     * @param output - object for writing to json file
+     */
+    public void setNotification(final Notification notification,
+                                final Movie addedMovie, final ArrayNode output) {
         this.notification = notification;
 
+        // update database
         if (notification.getMessage().equals("ADD")) {
             Movie existingMovie = this.movies.stream().
                     filter(movie -> movie.getName().equals(addedMovie.getName())).
                     findFirst().orElse(null);
 
+            // verify if the movie already exists
             if (existingMovie == null) {
                 this.movies.add(addedMovie);
             } else {
@@ -60,13 +76,14 @@ public final class DataBase {
             }
         }
 
-        if (notification.getMessage().equals("DELETE")){
+        if (notification.getMessage().equals("DELETE")) {
 
             String movieName = notification.getMovieName();
             Movie movieToBeDeleted = this.movies.stream().
                     filter(movie -> movie.getName().equals(movieName)).
                     findFirst().orElse(null);
 
+            // verify if the movie exists
             if (movieToBeDeleted != null) {
                 this.movies.remove(movieToBeDeleted);
             } else {
@@ -76,6 +93,7 @@ public final class DataBase {
             }
         }
 
+        // notify all observers
         for (Observer o : this.users) {
             o.update(this.notification, addedMovie);
         }
@@ -87,7 +105,7 @@ public final class DataBase {
         return users;
     }
 
-    public void setUsers(ArrayList<Observer> users) {
+    public void setUsers(final ArrayList<Observer> users) {
         this.users = users;
     }
 
@@ -97,5 +115,13 @@ public final class DataBase {
 
     public void setMovies(final ArrayList<Movie> movies) {
         this.movies = movies;
+    }
+
+    public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(final Notification notification) {
+        this.notification = notification;
     }
 }

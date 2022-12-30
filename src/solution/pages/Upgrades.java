@@ -2,12 +2,10 @@ package solution.pages;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
-import solution.Commands.ChangePageCommand;
-import solution.Commands.Command;
-import solution.Factory;
+import solution.command.ChangePageCommand;
 import solution.AppLogic;
 import solution.Print;
-import solution.data.DataBase;
+import solution.observer.DataBase;
 import java.util.ArrayList;
 
 public final class Upgrades implements Page {
@@ -72,7 +70,7 @@ public final class Upgrades implements Page {
      * @param app - the app logic
      * @return true if the user can buy the premium account, false otherwise
      */
-    private void buyPremiumAccount(final AppLogic app, ArrayNode output) {
+    private void buyPremiumAccount(final AppLogic app, final ArrayNode output) {
         if (app.getCurrentUser().getTokensCount() >= 10) {
             app.getCurrentUser().setTokensCount(app.getCurrentUser().getTokensCount()  - 10);
             app.getCurrentUser().getCredentials().setAccountType("premium");
@@ -89,7 +87,7 @@ public final class Upgrades implements Page {
      * @param app - the app logic
      * @return true if the user can buy tokens, false otherwise
      */
-    private void buyTokens(final ActionsInput input, final AppLogic app, ArrayNode output) {
+    private void buyTokens(final ActionsInput input, final AppLogic app, final ArrayNode output) {
 
         int balance = Integer.parseInt(app.getCurrentUser().getCredentials().getBalance());
         int nrTokens = input.getCount();

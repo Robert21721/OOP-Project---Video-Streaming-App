@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.AppLogic;
 import solution.Print;
-import solution.data.Credentials;
-import solution.data.DataBase;
-import solution.data.Observer;
-import solution.data.User;
+import solution.Credentials;
+import solution.observer.DataBase;
+import solution.observer.User;
 
 import java.util.ArrayList;
 
@@ -80,7 +79,6 @@ public final class Register implements Page {
             newUser.setCredentials(newUserCredentials);
 
             dataBase.addUser(newUser);
-            // dataBase.getUsers().add(newUser);
             app.setCurrentPage(HomePageAutentificat.getInstance());
             app.setCurrentUser(newUser);
            return true;
