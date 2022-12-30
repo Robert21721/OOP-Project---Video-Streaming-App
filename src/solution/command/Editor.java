@@ -3,10 +3,8 @@ package solution.command;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.files.ActionsInput;
 import solution.AppLogic;
-import solution.Print;
 import solution.observer.DataBase;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public final class Editor {
@@ -40,18 +38,6 @@ public final class Editor {
      */
     public void undo(final ActionsInput input, final AppLogic app,
                             final DataBase dataBase, final ArrayNode output) {
-        ArrayList<String> pages = new ArrayList<>();
-        pages.add("homePage A");
-        pages.add("homePage N");
-        pages.add("login");
-        pages.add("register");
-
-        // if the user is on one of this pages, the pack action is not possible
-        if (pages.contains(app.getCurrentPage().getPageName())) {
-            Print print = new Print();
-            print.writeError(output);
-            return;
-        }
 
         if (history.isEmpty()) {
             return;
@@ -59,7 +45,9 @@ public final class Editor {
 
         Command command = history.pop();
         if (command != null) {
-            command.undo(input, app, dataBase, output);
+            if (!command.undo(input, app, dataBase, output)) {
+                history.push(command);
+            }
         }
     }
 

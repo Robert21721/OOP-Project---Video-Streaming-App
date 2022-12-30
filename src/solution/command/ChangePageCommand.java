@@ -43,8 +43,21 @@ public final class ChangePageCommand implements Command {
     }
 
     @Override
-    public void undo(final ActionsInput input, final AppLogic app,
+    public boolean undo(final ActionsInput input, final AppLogic app,
                      final DataBase dataBase, final ArrayNode output) {
+        ArrayList<String> pages = new ArrayList<>();
+        pages.add("homePage A");
+        pages.add("homePage N");
+        pages.add("login");
+        pages.add("register");
+
+        // if the user is on one of these pages, the pack action is not possible
+        if (pages.contains(app.getCurrentPage().getPageName())) {
+            Print print = new Print();
+            print.writeError(output);
+            return false;
+        }
+
         this.newPageName = this.oldPageName;
         this.oldPageName = app.getCurrentPage().getPageName();
         this.newMovieName = this.oldMovieName;
@@ -54,6 +67,7 @@ public final class ChangePageCommand implements Command {
         }
 
         change(this.newMovieName, this.newPageName, app, dataBase, output);
+        return true;
     }
 
     private boolean change(final String movieName, final String pageName,

@@ -24,5 +24,5 @@ public interface Command {
      * @param dataBase - database with users and movies
      * @param output - object for writing to json file
      */
-    void undo(ActionsInput input, AppLogic app, DataBase dataBase, ArrayNode output);
+    boolean undo(ActionsInput input, AppLogic app, DataBase dataBase, ArrayNode output);
 }

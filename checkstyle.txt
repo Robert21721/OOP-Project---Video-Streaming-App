@@ -1,7 +1,7 @@
 Starting audit...
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/Test.java:9:28: Using the '.*' form of import should be avoided - java.util.concurrent.*. [AvoidStarImport]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/checker/CheckStyleConstants.java:3:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
-[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/command/ChangePageCommand.java:60:73: Parameter output should be final. [FinalParameters]
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/command/ChangePageCommand.java:74:73: Parameter output should be final. [FinalParameters]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/premiumUserNotification/PremiumUserRecommendation.java:4:16: Using the '.*' form of import should be avoided - solution.*. [AvoidStarImport]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/observer/DataBase.java:59:52: 'notification' hides a field. [HiddenField]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/observer/User.java:32:37: '15' is a magic number. [MagicNumber]
