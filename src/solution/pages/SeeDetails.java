@@ -62,11 +62,6 @@ public final class SeeDetails implements Page {
     public void executeOnPage(final ActionsInput input, final AppLogic app,
                                  final DataBase dataBase, final ArrayNode output) {
 
-        if (input.getType().equals("subscribe")) {
-            subscribe(input, app, output);
-            return;
-        }
-
         switch (input.getFeature()) {
             case "purchase":
                 purchase(app, output);
@@ -82,6 +77,10 @@ public final class SeeDetails implements Page {
 
             case "rate":
                 rateTheMovie(input, app, output);
+                break;
+
+            case "subscribe":
+                subscribe(input, app, output);
                 break;
 
             default:
@@ -144,8 +143,10 @@ public final class SeeDetails implements Page {
                 stream().filter(m -> m.getName().equals(movie.getName())).
                 findFirst().orElse(null);
 
-        // if the movie was already seen, do nothing
+        // if the movie was already seen
         if (movieWatched != null) {
+            Print print = new Print(app);
+            print.writeInfo(output);
             return;
         }
 

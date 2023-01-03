@@ -8,7 +8,7 @@ Starting audit...
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/observer/User.java:81:37: '15' is a magic number. [MagicNumber]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/Factory.java:3:22: Using the '.*' form of import should be avoided - solution.pages.*. [AvoidStarImport]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/pages/SeeDetails.java:5:16: Using the '.*' form of import should be avoided - solution.*. [AvoidStarImport]
-[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/pages/SeeDetails.java:208:31: '5' is a magic number. [MagicNumber]
+[ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/pages/SeeDetails.java:209:31: '5' is a magic number. [MagicNumber]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/pages/Upgrades.java:74:54: '10' is a magic number. [MagicNumber]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/pages/Upgrades.java:75:90: '10' is a magic number. [MagicNumber]
 [ERROR] /home/robert/Desktop/Materiale cursuri/ANUL 2/Semestrul 1/OOP/OOP---Project Old/OOP---Project/./src/solution/pages/Login.java:68: Line is longer than 100 characters (found 107). [LineLength]
